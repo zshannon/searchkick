@@ -46,7 +46,7 @@
 <ul>
 <li>stemming - <code>tomatoes</code> matches <code>tomato</code>
 </li>
-<li>special characters - <code>jalapenos</code> matches <code>jalapeños</code>
+<li>special characters - <code>jalapeno</code> matches <code>jalapeño</code>
 </li>
 <li>extra whitespace - <code>dishwasher</code> matches <code>dish washer</code>
 </li>
@@ -54,6 +54,12 @@
 </li>
 <li>custom synonyms - <code>qtip</code> matches <code>cotton swab</code>
 </li>
+</ul><p>Plus, you can:</p>
+
+<ul>
+<li>query like SQL</li>
+<li>boost popular documents</li>
+<li>improve results from conversions</li>
 </ul><p>Powered by Elasticsearch</p>
 
 <p><img class="emoji" title=":tangerine:" alt=":tangerine:" src="https://github.global.ssl.fastly.net/images/icons/emoji/tangerine.png" height="20" width="20" align="absmiddle"> Battle-tested at <a href="https://www.instacart.com">Instacart</a></p>
@@ -137,7 +143,7 @@
 <h3>
 <a name="pagination" class="anchor" href="#pagination"><span class="octicon octicon-link"></span></a>Pagination</h3>
 
-<p>Plays nicely with kaminari and will_paginate</p>
+<p>Plays nicely with kaminari and will_paginate.</p>
 
 <div class="highlight"><pre><span class="c1"># controller</span>
 <span class="vi">@products</span> <span class="o">=</span> <span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"milk"</span><span class="p">,</span> <span class="ss">page</span><span class="p">:</span> <span class="n">params</span><span class="o">[</span><span class="ss">:page</span><span class="o">]</span><span class="p">,</span> <span class="n">per_page</span><span class="p">:</span> <span class="mi">20</span>
@@ -172,7 +178,7 @@
 <h3>
 <a name="indexing" class="anchor" href="#indexing"><span class="octicon octicon-link"></span></a>Indexing</h3>
 
-<p>Choose what data gets indexed.</p>
+<p>Choose what data is indexed.</p>
 
 <div class="highlight"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
   <span class="k">def</span> <span class="nf">_source</span>
@@ -189,7 +195,7 @@
 <span class="k">end</span>
 </pre></div>
 
-<p>Searchkick uses <code>find_in_batches</code> to import documents.  To eagar load associations, use the <code>searchkick_import</code> scope.</p>
+<p>Searchkick uses <code>find_in_batches</code> to import documents.  To eager load associations, use the <code>searchkick_import</code> scope.</p>
 
 <div class="highlight"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
   <span class="n">scope</span> <span class="ss">:searchkick_import</span><span class="p">,</span> <span class="n">includes</span><span class="p">(</span><span class="ss">:searches</span><span class="p">)</span>
@@ -197,11 +203,9 @@
 </pre></div>
 
 <h3>
-<a name="improve-over-time" class="anchor" href="#improve-over-time"><span class="octicon octicon-link"></span></a>Improve Over Time</h3>
+<a name="improve-search-from-conversions" class="anchor" href="#improve-search-from-conversions"><span class="octicon octicon-link"></span></a>Improve Search from Conversions</h3>
 
-<p>Get better results from your analytics on conversions.</p>
-
-<p>First, you must keep track of search conversions.  The database works well for low volume, but feel free to use redis or another datastore.</p>
+<p>First, keep track of conversions.  The database works well for low volume, but feel free to use Redis or another datastore.</p>
 
 <div class="highlight"><pre><span class="k">class</span> <span class="nc">Search</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
   <span class="n">belongs_to</span> <span class="ss">:product</span>
@@ -209,7 +213,7 @@
 <span class="k">end</span>
 </pre></div>
 
-<p>Add the conversions to the index.</p>
+<p>Add conversions to the index.</p>
 
 <div class="highlight"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
   <span class="n">has_many</span> <span class="ss">:searches</span>
@@ -232,9 +236,7 @@
 <a name="facets" class="anchor" href="#facets"><span class="octicon octicon-link"></span></a>Facets</h3>
 
 <div class="highlight"><pre><span class="n">search</span> <span class="o">=</span> <span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"2% Milk"</span><span class="p">,</span> <span class="ss">facets</span><span class="p">:</span> <span class="o">[</span><span class="ss">:store_id</span><span class="p">,</span> <span class="ss">:aisle_id</span><span class="o">]</span>
-<span class="n">search</span><span class="o">.</span><span class="n">facets</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">facet</span><span class="o">|</span>
-  <span class="nb">p</span> <span class="n">facet</span>
-<span class="k">end</span>
+<span class="nb">p</span> <span class="n">search</span><span class="o">.</span><span class="n">facets</span>
 </pre></div>
 
 <p>Advanced</p>
@@ -340,14 +342,6 @@
 
 <ul>
 <li>Built-in synonyms from WordNet</li>
-<li>Autocomplete (partial word matching)</li>
-<li>Exact phrase matches (in order)</li>
-<li>Allow for "exact search" with quotes</li>
-<li>Test helpers - everyone should test their own search</li>
-<li><a href="http://www.elasticsearch.org/guide/reference/api/search/suggest/">Did you mean?</a></li>
-<li>Make updates to old and new index while reindexing <a href="http://www.kickstarter.com/backing-and-hacking">possibly with an another alias</a>
-</li>
-<li>Dashboard w/ real-time analytics (separate gem)</li>
 </ul><h2>
 <a name="contributing" class="anchor" href="#contributing"><span class="octicon octicon-link"></span></a>Contributing</h2>
 
