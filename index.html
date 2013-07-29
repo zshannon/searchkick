@@ -93,7 +93,6 @@
 <div class="highlight"><pre><span class="n">products</span> <span class="o">=</span> <span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"2% Milk"</span>
 <span class="n">products</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">product</span><span class="o">|</span>
   <span class="nb">puts</span> <span class="n">product</span><span class="o">.</span><span class="n">name</span>
-  <span class="nb">puts</span> <span class="n">product</span><span class="o">.</span><span class="n">_score</span> <span class="c1"># added by searchkick - between 0 and 1</span>
 <span class="k">end</span>
 </pre></div>
 
@@ -180,7 +179,7 @@
 <p>Choose what data is indexed.</p>
 
 <div class="highlight"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
-  <span class="k">def</span> <span class="nf">_source</span>
+  <span class="k">def</span> <span class="nf">search_data</span>
     <span class="n">as_json</span> <span class="ss">only</span><span class="p">:</span> <span class="o">[</span><span class="ss">:name</span><span class="p">,</span> <span class="ss">:active</span><span class="o">]</span><span class="p">,</span> <span class="kp">include</span><span class="p">:</span> <span class="p">{</span><span class="ss">brand</span><span class="p">:</span> <span class="p">{</span><span class="ss">only</span><span class="p">:</span> <span class="o">[</span><span class="ss">:city</span><span class="o">]</span><span class="p">}}</span>
     <span class="c1"># or equivalently</span>
     <span class="p">{</span>
@@ -194,10 +193,10 @@
 <span class="k">end</span>
 </pre></div>
 
-<p>Searchkick uses <code>find_in_batches</code> to import documents.  To eager load associations, use the <code>searchkick_import</code> scope.</p>
+<p>Searchkick uses <code>find_in_batches</code> to import documents.  To eager load associations, use the <code>search_import</code> scope.</p>
 
 <div class="highlight"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
-  <span class="n">scope</span> <span class="ss">:searchkick_import</span><span class="p">,</span> <span class="n">includes</span><span class="p">(</span><span class="ss">:searches</span><span class="p">)</span>
+  <span class="n">scope</span> <span class="ss">:search_import</span><span class="p">,</span> <span class="n">includes</span><span class="p">(</span><span class="ss">:searches</span><span class="p">)</span>
 <span class="k">end</span>
 </pre></div>
 
@@ -219,7 +218,7 @@
 <div class="highlight"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
   <span class="n">has_many</span> <span class="ss">:searches</span>
 
-  <span class="k">def</span> <span class="nf">_source</span>
+  <span class="k">def</span> <span class="nf">search_data</span>
     <span class="p">{</span>
       <span class="nb">name</span><span class="p">:</span> <span class="nb">name</span><span class="p">,</span>
       <span class="ss">conversions</span><span class="p">:</span> <span class="n">searches</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">"query"</span><span class="p">)</span><span class="o">.</span><span class="n">count</span>
