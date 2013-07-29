@@ -249,16 +249,30 @@
 <a name="deployment" class="anchor" href="#deployment"><span class="octicon octicon-link"></span></a>Deployment</h2>
 
 <h3>
-<a name="bonsai-on-heroku" class="anchor" href="#bonsai-on-heroku"><span class="octicon octicon-link"></span></a>Bonsai on Heroku</h3>
+<a name="heroku" class="anchor" href="#heroku"><span class="octicon octicon-link"></span></a>Heroku</h3>
 
-<p>Install the add-on:</p>
+<p>Choose an add-on: <a href="https://addons.heroku.com/searchbox">SearchBox</a>, <a href="https://addons.heroku.com/bonsai">Bonsai</a>, or <a href="https://addons.heroku.com/foundelasticsearch">Found</a>.</p>
 
-<div class="highlight"><pre>heroku addons:add bonsai
+<div class="highlight"><pre><span class="c"># SearchBox</span>
+heroku addons:add searchbox:starter
+
+<span class="c"># Bonsai</span>
+heroku addons:add bonsai
+
+<span class="c"># Found</span>
+heroku addons:add foundelasticsearch
 </pre></div>
 
-<p>And create an initializer <code>config/initializers/bonsai.rb</code> with:</p>
+<p>And create an initializer <code>config/initializers/elasticsearch.rb</code> with:</p>
 
-<div class="highlight"><pre><span class="no">ENV</span><span class="o">[</span><span class="s2">"ELASTICSEARCH_URL"</span><span class="o">]</span> <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s2">"BONSAI_URL"</span><span class="o">]</span>
+<div class="highlight"><pre><span class="c1"># SearchBox</span>
+<span class="no">ENV</span><span class="o">[</span><span class="s2">"ELASTICSEARCH_URL"</span><span class="o">]</span> <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s2">"SEARCHBOX_URL"</span><span class="o">]</span>
+
+<span class="c1"># Bonsai</span>
+<span class="no">ENV</span><span class="o">[</span><span class="s2">"ELASTICSEARCH_URL"</span><span class="o">]</span> <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s2">"BONSAI_URL"</span><span class="o">]</span>
+
+<span class="c1"># Found</span>
+<span class="no">ENV</span><span class="o">[</span><span class="s2">"ELASTICSEARCH_URL"</span><span class="o">]</span> <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s2">"FOUNDELASTICSEARCH_URL"</span><span class="o">]</span>
 </pre></div>
 
 <p>Then deploy and reindex:</p>
