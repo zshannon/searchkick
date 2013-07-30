@@ -42,12 +42,14 @@
     <div class="container-fluid">
       <div class="page-header">
         <h1>Searchkick</h1>
-        <p class="lead"><img class="emoji" title=":rocket:" alt=":rocket:" src="https://github.global.ssl.fastly.net/images/icons/emoji/rocket.png" height="20" width="20" align="absmiddle"> Search made easy <img class="emoji" title=":tangerine:" alt=":tangerine:" src="https://github.global.ssl.fastly.net/images/icons/emoji/tangerine.png" height="20" width="20" align="absmiddle" style="margin-left: 60px;"> Battle-tested at <a href="https://www.instacart.com">Instacart</a></p>
+        <p class="lead"><img class="emoji" title=":rocket:" alt=":rocket:" src="https://github.global.ssl.fastly.net/images/icons/emoji/rocket.png" height="20" width="20" align="absmiddle"> Intelligent search made easy <img class="emoji" title=":tangerine:" alt=":tangerine:" src="https://github.global.ssl.fastly.net/images/icons/emoji/tangerine.png" height="20" width="20" align="absmiddle" style="margin-left: 60px;"> Battle-tested at <a href="https://www.instacart.com">Instacart</a></p>
       </div>
 
 <!-- begin readme -->
 
-<p>Searchkick provides sensible search defaults.  It handles:</p>
+<p>Searchkick learns what <strong>your users</strong> are looking for.  As more people search, it gets smarter and the results get better.  It's friendly for developers - and magical for your users.</p>
+
+<p>Searchkick handles:</p>
 
 <ul>
 <li>stemming - <code>tomatoes</code> matches <code>tomato</code>
@@ -65,9 +67,7 @@
 <ul>
 <li>query like SQL - no need to learn a new query language</li>
 <li>reindex without downtime</li>
-<li>continually improve results from conversions - <strong>pretty awesome</strong>
-</li>
-</ul>
+</ul><p><img class="emoji" title=":tangerine:" alt=":tangerine:" src="https://github.global.ssl.fastly.net/images/icons/emoji/tangerine.png" height="20" width="20" align="absmiddle"> Battle-tested at <a href="https://www.instacart.com">Instacart</a></p>
 
 <h2>
 <a name="get-started" class="anchor" href="#get-started"><span class="octicon octicon-link"></span></a>Get Started</h2>
@@ -209,7 +209,7 @@
 <h3>
 <a name="continually-improve-results" class="anchor" href="#continually-improve-results"><span class="octicon octicon-link"></span></a>Continually Improve Results</h3>
 
-<p>Use data on search conversions to improve results.  This can make a <strong>huge</strong> difference.</p>
+<p>Searchkick uses conversion data to learn what users are looking for.</p>
 
 <p>First, keep track of conversions.  The database works well for low volume, but feel free to use Redis or another datastore.</p>
 
@@ -233,9 +233,9 @@
 <span class="k">end</span>
 </pre></div>
 
-<p>Reindex and tell the search method to use conversions.</p>
+<p>Reindex and set up a cron job to add new conversions daily.</p>
 
-<div class="highlight"><pre><span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"Fat Free Milk"</span><span class="p">,</span> <span class="ss">conversions</span><span class="p">:</span> <span class="kp">true</span>
+<div class="highlight"><pre><span class="n">heroku</span> <span class="n">run</span> <span class="n">rake</span> <span class="ss">searchkick</span><span class="p">:</span><span class="n">reindex</span> <span class="no">CLASS</span><span class="o">=</span><span class="no">Product</span>
 </pre></div>
 
 <h3>
