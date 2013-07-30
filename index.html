@@ -223,7 +223,9 @@
 
 <p>Searchkick uses conversion data to learn what users are looking for.</p>
 
-<p>First, keep track of conversions.  The database works well for low volume, but feel free to use Redis or another datastore.</p>
+<p>First, choose a conversion metric for your application.  At Instacart, an item added to the cart is a conversion.</p>
+
+<p>Next, track the conversions.  The database works well for low volume, but feel free to use Redis or another datastore.</p>
 
 <div class="highlight"><pre><span class="k">class</span> <span class="nc">Search</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
   <span class="n">belongs_to</span> <span class="ss">:product</span>
@@ -247,7 +249,7 @@
 
 <p>Reindex and set up a cron job to add new conversions daily.</p>
 
-<div class="highlight"><pre><span class="n">heroku</span> <span class="n">run</span> <span class="n">rake</span> <span class="ss">searchkick</span><span class="p">:</span><span class="n">reindex</span> <span class="no">CLASS</span><span class="o">=</span><span class="no">Product</span>
+<div class="highlight"><pre><span class="n">rake</span> <span class="ss">searchkick</span><span class="p">:</span><span class="n">reindex</span> <span class="no">CLASS</span><span class="o">=</span><span class="no">Product</span>
 </pre></div>
 
 <h3>
