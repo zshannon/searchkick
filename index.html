@@ -341,7 +341,9 @@ heroku addons:add foundelasticsearch
 <li>
 <p>Replace tire mapping w/ searchkick method</p>
 
-<div class="highlight"><pre><span class="n">searchkick</span> <span class="n">index_name</span><span class="p">:</span> <span class="s2">"products_v2"</span>
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+<span class="n">searchkick</span>
+<span class="k">end</span>
 </pre></div>
 </li>
 <li>
