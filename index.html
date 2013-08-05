@@ -79,7 +79,9 @@
 <ul>
 <li>query like SQL - no need to learn a new query language</li>
 <li>reindex without downtime</li>
-</ul>
+<li>easily personalize results for each user [master branch]</li>
+<li>autocomplete [master branch]</li>
+</ul><p><img class="emoji" title=":tangerine:" alt=":tangerine:" src="https://github.global.ssl.fastly.net/images/icons/emoji/tangerine.png" height="20" width="20" align="absmiddle"> Battle-tested at <a href="https://www.instacart.com">Instacart</a></p>
 
 <h2>
 <a name="get-started" class="anchor" href="#get-started"><span class="octicon octicon-link"></span></a>Get Started</h2>
@@ -182,6 +184,21 @@
 </pre></div>
 
 <h3>
+<a name="autocomplete-master-branch" class="anchor" href="#autocomplete-master-branch"><span class="octicon octicon-link"></span></a>Autocomplete [master branch]</h3>
+
+<p>You must specify which fields use this feature since this can increase the index size significantly.  Don’t worry - this gives you blazing faster queries.</p>
+
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+  <span class="n">searchkick</span> <span class="ss">autocomplete</span><span class="p">:</span> <span class="o">[</span><span class="ss">:name</span><span class="o">]</span>
+<span class="k">end</span>
+</pre></div>
+
+<p>Reindex and search with:</p>
+
+<div class="highlight"><pre><span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"puddi"</span><span class="p">,</span> <span class="ss">autocomplete</span><span class="p">:</span> <span class="kp">true</span>
+</pre></div>
+
+<h3>
 <a name="synonyms" class="anchor" href="#synonyms"><span class="octicon octicon-link"></span></a>Synonyms</h3>
 
 <div class="highlight"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
@@ -189,12 +206,12 @@
 <span class="k">end</span>
 </pre></div>
 
-<p>You must call <code>Product.reindex</code> after changing synonyms.</p>
+<p>Call <code>Product.reindex</code> after changing synonyms.</p>
 
 <h3>
 <a name="indexing" class="anchor" href="#indexing"><span class="octicon octicon-link"></span></a>Indexing</h3>
 
-<p>Control what data is indexed with the <code>search_data</code> method.</p>
+<p>Control what data is indexed with the <code>search_data</code> method. Call <code>Product.reindex</code> after changing this method.</p>
 
 <div class="highlight"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
   <span class="k">def</span> <span class="nf">search_data</span>
@@ -240,6 +257,7 @@
     <span class="p">{</span>
       <span class="nb">name</span><span class="p">:</span> <span class="nb">name</span><span class="p">,</span>
       <span class="ss">conversions</span><span class="p">:</span> <span class="n">searches</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">"query"</span><span class="p">)</span><span class="o">.</span><span class="n">count</span>
+      <span class="c1"># {"ice cream" =&gt; 234, "chocolate" =&gt; 67, "cream" =&gt; 2}</span>
     <span class="p">}</span>
   <span class="k">end</span>
 <span class="k">end</span>
@@ -248,6 +266,29 @@
 <p>Reindex and set up a cron job to add new conversions daily.</p>
 
 <div class="highlight"><pre><span class="n">rake</span> <span class="ss">searchkick</span><span class="p">:</span><span class="n">reindex</span> <span class="no">CLASS</span><span class="o">=</span><span class="no">Product</span>
+</pre></div>
+
+<h3>
+<a name="personalized-results-master-branch" class="anchor" href="#personalized-results-master-branch"><span class="octicon octicon-link"></span></a>Personalized Results [master branch]</h3>
+
+<p><strong>Subject to change before the next gem release</strong></p>
+
+<p>Order results differently for each user.  For example, show a user’s previously ordered products before other results.</p>
+
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+  <span class="k">def</span> <span class="nf">search_data</span>
+    <span class="p">{</span>
+      <span class="nb">name</span><span class="p">:</span> <span class="nb">name</span><span class="p">,</span>
+      <span class="n">user_ids</span><span class="p">:</span> <span class="n">orders</span><span class="o">.</span><span class="n">pluck</span><span class="p">(</span><span class="ss">:user_id</span><span class="p">)</span> <span class="c1"># boost this product for these users</span>
+      <span class="c1"># [4, 8, 15, 16, 23, 42]</span>
+    <span class="p">}</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+
+<p>Reindex and search with:</p>
+
+<div class="highlight"><pre><span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"milk"</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="mi">8</span>
 </pre></div>
 
 <h3>
@@ -342,7 +383,7 @@ heroku addons:add foundelasticsearch
 <p>Replace tire mapping w/ searchkick method</p>
 
 <div class="highlight"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
-<span class="n">searchkick</span>
+  <span class="n">searchkick</span>
 <span class="k">end</span>
 </pre></div>
 </li>
@@ -369,7 +410,7 @@ heroku addons:add foundelasticsearch
 <h2>
 <a name="thanks" class="anchor" href="#thanks"><span class="octicon octicon-link"></span></a>Thanks</h2>
 
-<p>Thanks to Karel Minarik for <a href="https://github.com/karmi/tire">Tire</a> and Jaroslav Kalistsuk for <a href="https://gist.github.com/jarosan/3124884">zero downtime reindexing</a>.</p>
+<p>Thanks to Karel Minarik for <a href="https://github.com/karmi/tire">Tire</a>, Jaroslav Kalistsuk for <a href="https://gist.github.com/jarosan/3124884">zero downtime reindexing</a>, and Alex Leschenko for <a href="https://github.com/leschenko/elasticsearch_autocomplete">Elasticsearch autocomplete</a>.</p>
 
 <h2>
 <a name="todo" class="anchor" href="#todo"><span class="octicon octicon-link"></span></a>TODO</h2>
@@ -377,6 +418,7 @@ heroku addons:add foundelasticsearch
 <ul>
 <li>Make Searchkick work with any language</li>
 <li>Built-in synonyms from WordNet</li>
+<li><a href="http://www.elasticsearch.org/guide/reference/api/search/suggest/">Did you mean?</a></li>
 </ul><h2>
 <a name="contributing" class="anchor" href="#contributing"><span class="octicon octicon-link"></span></a>Contributing</h2>
 
