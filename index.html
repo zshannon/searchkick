@@ -60,7 +60,6 @@
 <!-- begin readme -->
 
 <p>Searchkick learns what <strong>your users</strong> are looking for.  As more people search, it gets smarter and the results get better.  It’s friendly for developers - and magical for your users.</p>
-
 <p>Searchkick handles:</p>
 
 <ul>
@@ -79,8 +78,9 @@
 <ul>
 <li>query like SQL - no need to learn a new query language</li>
 <li>reindex without downtime</li>
-<li>easily personalize results for each user [master branch]</li>
-<li>autocomplete [master branch]</li>
+<li>easily personalize results for each user</li>
+<li>autocomplete</li>
+<li>“Did you mean” suggestions</li>
 </ul>
 
 <h2>
@@ -184,18 +184,20 @@
 </pre></div>
 
 <h3>
-<a name="autocomplete-master-branch" class="anchor" href="#autocomplete-master-branch"><span class="octicon octicon-link"></span></a>Autocomplete [master branch]</h3>
+<a name="autocomplete" class="anchor" href="#autocomplete"><span class="octicon octicon-link"></span></a>Autocomplete</h3>
+
+<p><a href="https://github-camo.global.ssl.fastly.net/9ecf67854fb719ffd0b2eb5b0ae9504470a7d281/687474703a2f2f616e6b616e652e6769746875622e696f2f7365617263686b69636b2f6175746f636f6d706c6574652e706e67" target="_blank"><img src="https://github-camo.global.ssl.fastly.net/9ecf67854fb719ffd0b2eb5b0ae9504470a7d281/687474703a2f2f616e6b616e652e6769746875622e696f2f7365617263686b69636b2f6175746f636f6d706c6574652e706e67" alt="Autocomplete" style="max-width:100%;"></a></p>
 
 <p>You must specify which fields use this feature since this can increase the index size significantly.  Don’t worry - this gives you blazing faster queries.</p>
 
-<div class="highlight"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
-  <span class="n">searchkick</span> <span class="ss">autocomplete</span><span class="p">:</span> <span class="o">[</span><span class="ss">:name</span><span class="o">]</span>
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">Website</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+  <span class="n">searchkick</span> <span class="ss">autocomplete</span><span class="p">:</span> <span class="o">[</span><span class="s2">"title"</span><span class="o">]</span>
 <span class="k">end</span>
 </pre></div>
 
 <p>Reindex and search with:</p>
 
-<div class="highlight"><pre><span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"puddi"</span><span class="p">,</span> <span class="ss">autocomplete</span><span class="p">:</span> <span class="kp">true</span>
+<div class="highlight"><pre><span class="no">Website</span><span class="o">.</span><span class="n">search</span> <span class="s2">"where"</span><span class="p">,</span> <span class="ss">autocomplete</span><span class="p">:</span> <span class="kp">true</span>
 </pre></div>
 
 <h3>
@@ -250,8 +252,12 @@
 
 <p>Add conversions to the index.</p>
 
+<p><strong>Note</strong>: You must specify the conversions field as of version <code>0.2.0</code>.</p>
+
 <div class="highlight"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
   <span class="n">has_many</span> <span class="ss">:searches</span>
+
+  <span class="n">searchkick</span> <span class="ss">conversions</span><span class="p">:</span> <span class="s2">"conversions"</span> <span class="c1"># name of field</span>
 
   <span class="k">def</span> <span class="nf">search_data</span>
     <span class="p">{</span>
@@ -269,13 +275,13 @@
 </pre></div>
 
 <h3>
-<a name="personalized-results-master-branch" class="anchor" href="#personalized-results-master-branch"><span class="octicon octicon-link"></span></a>Personalized Results [master branch]</h3>
+<a name="personalized-results" class="anchor" href="#personalized-results"><span class="octicon octicon-link"></span></a>Personalized Results</h3>
 
-<p><strong>Subject to change before the next gem release</strong></p>
-
-<p>Order results differently for each user.  For example, show a user’s previously ordered products before other results.</p>
+<p>Order results differently for each user.  For example, show a user’s previously purchased products before other results.</p>
 
 <div class="highlight"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+  <span class="n">searchkick</span> <span class="ss">personalize</span><span class="p">:</span> <span class="s2">"user_ids"</span>
+
   <span class="k">def</span> <span class="nf">search_data</span>
     <span class="p">{</span>
       <span class="nb">name</span><span class="p">:</span> <span class="nb">name</span><span class="p">,</span>
@@ -292,10 +298,30 @@
 </pre></div>
 
 <h3>
+<a name="suggestions" class="anchor" href="#suggestions"><span class="octicon octicon-link"></span></a>Suggestions</h3>
+
+<p><a href="https://github-camo.global.ssl.fastly.net/c9682040aadd5d5c72ed1c2643e829a4e12cf0d0/687474703a2f2f616e6b616e652e6769746875622e696f2f7365617263686b69636b2f726563757273696f6e2e706e67" target="_blank"><img src="https://github-camo.global.ssl.fastly.net/c9682040aadd5d5c72ed1c2643e829a4e12cf0d0/687474703a2f2f616e6b616e652e6769746875622e696f2f7365617263686b69636b2f726563757273696f6e2e706e67" alt="Suggest" style="max-width:100%;"></a></p>
+
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+  <span class="n">searchkick</span> <span class="ss">suggest</span><span class="p">:</span> <span class="o">[</span><span class="s2">"name"</span><span class="o">]</span> <span class="c1"># fields to generate suggestions</span>
+<span class="k">end</span>
+</pre></div>
+
+<p>Reindex and search with:</p>
+
+<div class="highlight"><pre><span class="n">products</span> <span class="o">=</span> <span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"peantu butta"</span><span class="p">,</span> <span class="ss">suggest</span><span class="p">:</span> <span class="kp">true</span>
+<span class="n">products</span><span class="o">.</span><span class="n">suggestions</span> <span class="c1"># ["peanut butter"]</span>
+</pre></div>
+
+<h3>
 <a name="facets" class="anchor" href="#facets"><span class="octicon octicon-link"></span></a>Facets</h3>
 
-<div class="highlight"><pre><span class="n">search</span> <span class="o">=</span> <span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"2% Milk"</span><span class="p">,</span> <span class="ss">facets</span><span class="p">:</span> <span class="o">[</span><span class="ss">:store_id</span><span class="p">,</span> <span class="ss">:aisle_id</span><span class="o">]</span>
-<span class="nb">p</span> <span class="n">search</span><span class="o">.</span><span class="n">facets</span>
+<p><a href="http://www.elasticsearch.org/guide/reference/api/search/facets/">Facets</a> provide aggregated search data.</p>
+
+<p><a href="https://github-camo.global.ssl.fastly.net/16d4cf1db76cda4dac1cca3242f86fdd907631d5/687474703a2f2f616e6b616e652e6769746875622e696f2f7365617263686b69636b2f6661636574732e706e67" target="_blank"><img src="https://github-camo.global.ssl.fastly.net/16d4cf1db76cda4dac1cca3242f86fdd907631d5/687474703a2f2f616e6b616e652e6769746875622e696f2f7365617263686b69636b2f6661636574732e706e67" alt="Facets" style="max-width:100%;"></a></p>
+
+<div class="highlight"><pre><span class="n">products</span> <span class="o">=</span> <span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"chuck taylor"</span><span class="p">,</span> <span class="ss">facets</span><span class="p">:</span> <span class="o">[</span><span class="ss">:product_type</span><span class="p">,</span> <span class="ss">:gender</span><span class="p">,</span> <span class="ss">:brand</span><span class="o">]</span>
+<span class="nb">p</span> <span class="n">products</span><span class="o">.</span><span class="n">facets</span>
 </pre></div>
 
 <p>Advanced</p>
@@ -417,8 +443,6 @@ heroku addons:add foundelasticsearch
 
 <ul>
 <li>Make Searchkick work with any language</li>
-<li>Built-in synonyms from WordNet</li>
-<li><a href="http://www.elasticsearch.org/guide/reference/api/search/suggest/">Did you mean?</a></li>
 </ul><h2>
 <a name="contributing" class="anchor" href="#contributing"><span class="octicon octicon-link"></span></a>Contributing</h2>
 
