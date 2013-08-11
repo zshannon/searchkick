@@ -339,24 +339,28 @@
 
 <div class="highlight"><pre><span class="c"># SearchBox</span>
 heroku addons:add searchbox:starter
+heroku config:add <span class="nv">ELASTICSEARCH_URL</span><span class="o">=</span><span class="sb">`</span>heroku config:get SEARCHBOX_URL<span class="sb">`</span>
 
 <span class="c"># Bonsai</span>
 heroku addons:add bonsai
+heroku config:add <span class="nv">ELASTICSEARCH_URL</span><span class="o">=</span><span class="sb">`</span>heroku config:get BONSAI_URL<span class="sb">`</span>
 
 <span class="c"># Found</span>
 heroku addons:add foundelasticsearch
+heroku config:add <span class="nv">ELASTICSEARCH_URL</span><span class="o">=</span><span class="sb">`</span>heroku config:get FOUNDELASTICSEARCH_URL<span class="sb">`</span>
 </pre></div>
 
-<p>And create an initializer <code>config/initializers/elasticsearch.rb</code> with:</p>
+<p>Then deploy and reindex:</p>
 
-<div class="highlight"><pre><span class="c1"># SearchBox</span>
-<span class="no">ENV</span><span class="o">[</span><span class="s2">"ELASTICSEARCH_URL"</span><span class="o">]</span> <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s2">"SEARCHBOX_URL"</span><span class="o">]</span>
+<div class="highlight"><pre>heroku run rake searchkick:reindex <span class="nv">CLASS</span><span class="o">=</span>Product
+</pre></div>
 
-<span class="c1"># Bonsai</span>
-<span class="no">ENV</span><span class="o">[</span><span class="s2">"ELASTICSEARCH_URL"</span><span class="o">]</span> <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s2">"BONSAI_URL"</span><span class="o">]</span>
+<h3>
+<a name="other" class="anchor" href="#other"><span class="octicon octicon-link"></span></a>Other</h3>
 
-<span class="c1"># Found</span>
-<span class="no">ENV</span><span class="o">[</span><span class="s2">"ELASTICSEARCH_URL"</span><span class="o">]</span> <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s2">"FOUNDELASTICSEARCH_URL"</span><span class="o">]</span>
+<p>Create an initializer <code>config/initializers/elasticsearch.rb</code> with:</p>
+
+<div class="highlight"><pre><span class="no">ENV</span><span class="o">[</span><span class="s2">"ELASTICSEARCH_URL"</span><span class="o">]</span> <span class="o">=</span> <span class="s2">"http://username:password@api.searchbox.io"</span>
 </pre></div>
 
 <p>Then deploy and reindex:</p>
