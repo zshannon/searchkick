@@ -217,14 +217,11 @@
 
 <div class="highlight"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
   <span class="k">def</span> <span class="nf">search_data</span>
-    <span class="n">as_json</span> <span class="ss">only</span><span class="p">:</span> <span class="o">[</span><span class="ss">:name</span><span class="p">,</span> <span class="ss">:active</span><span class="o">]</span><span class="p">,</span> <span class="kp">include</span><span class="p">:</span> <span class="p">{</span><span class="ss">brand</span><span class="p">:</span> <span class="p">{</span><span class="ss">only</span><span class="p">:</span> <span class="o">[</span><span class="ss">:city</span><span class="o">]</span><span class="p">}}</span>
+    <span class="n">as_json</span> <span class="ss">only</span><span class="p">:</span> <span class="o">[</span><span class="ss">:name</span><span class="p">,</span> <span class="ss">:active</span><span class="o">]</span>
     <span class="c1"># or equivalently</span>
     <span class="p">{</span>
       <span class="nb">name</span><span class="p">:</span> <span class="nb">name</span><span class="p">,</span>
-      <span class="ss">active</span><span class="p">:</span> <span class="n">active</span><span class="p">,</span>
-      <span class="ss">brand</span><span class="p">:</span> <span class="p">{</span>
-        <span class="ss">city</span><span class="p">:</span> <span class="n">brand</span><span class="o">.</span><span class="n">city</span>
-      <span class="p">}</span>
+      <span class="ss">active</span><span class="p">:</span> <span class="n">active</span>
     <span class="p">}</span>
   <span class="k">end</span>
 <span class="k">end</span>
@@ -250,9 +247,9 @@
 <span class="k">end</span>
 </pre></div>
 
-<p>Add conversions to the index.</p>
+<p>You do <strong>not</strong> need to clean up the search queries.  Searchkick automatically treats <code>apple</code> and <code>APPLES</code> the same.</p>
 
-<p><strong>Note</strong>: You must specify the conversions field as of version <code>0.2.0</code>.</p>
+<p>Next, add conversions to the index.  You must specify the conversions field as of version <code>0.2.0</code>.</p>
 
 <div class="highlight"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
   <span class="n">has_many</span> <span class="ss">:searches</span>
