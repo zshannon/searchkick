@@ -184,23 +184,6 @@
 </pre></div>
 
 <h3>
-<a name="autocomplete" class="anchor" href="#autocomplete"><span class="octicon octicon-link"></span></a>Autocomplete</h3>
-
-<p><a href="https://github-camo.global.ssl.fastly.net/9ecf67854fb719ffd0b2eb5b0ae9504470a7d281/687474703a2f2f616e6b616e652e6769746875622e696f2f7365617263686b69636b2f6175746f636f6d706c6574652e706e67" target="_blank"><img src="https://github-camo.global.ssl.fastly.net/9ecf67854fb719ffd0b2eb5b0ae9504470a7d281/687474703a2f2f616e6b616e652e6769746875622e696f2f7365617263686b69636b2f6175746f636f6d706c6574652e706e67" alt="Autocomplete" style="max-width:100%;"></a></p>
-
-<p>You must specify which fields use this feature since this can increase the index size significantly.  Don’t worry - this gives you blazing faster queries.</p>
-
-<div class="highlight"><pre><span class="k">class</span> <span class="nc">Website</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
-  <span class="n">searchkick</span> <span class="ss">autocomplete</span><span class="p">:</span> <span class="o">[</span><span class="s2">"title"</span><span class="o">]</span>
-<span class="k">end</span>
-</pre></div>
-
-<p>Reindex and search with:</p>
-
-<div class="highlight"><pre><span class="no">Website</span><span class="o">.</span><span class="n">search</span> <span class="s2">"where"</span><span class="p">,</span> <span class="ss">autocomplete</span><span class="p">:</span> <span class="kp">true</span>
-</pre></div>
-
-<h3>
 <a name="synonyms" class="anchor" href="#synonyms"><span class="octicon octicon-link"></span></a>Synonyms</h3>
 
 <div class="highlight"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
@@ -292,6 +275,56 @@
 <p>Reindex and search with:</p>
 
 <div class="highlight"><pre><span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"milk"</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="mi">8</span>
+</pre></div>
+
+<h3>
+<a name="autocomplete" class="anchor" href="#autocomplete"><span class="octicon octicon-link"></span></a>Autocomplete</h3>
+
+<p>Autocomplete predicts what a user will type, making the search experience faster and easier.</p>
+
+<p><a href="https://github-camo.global.ssl.fastly.net/9ecf67854fb719ffd0b2eb5b0ae9504470a7d281/687474703a2f2f616e6b616e652e6769746875622e696f2f7365617263686b69636b2f6175746f636f6d706c6574652e706e67" target="_blank"><img src="https://github-camo.global.ssl.fastly.net/9ecf67854fb719ffd0b2eb5b0ae9504470a7d281/687474703a2f2f616e6b616e652e6769746875622e696f2f7365617263686b69636b2f6175746f636f6d706c6574652e706e67" alt="Autocomplete" style="max-width:100%;"></a></p>
+
+<p>First, specify which fields use this feature.  This is necessary since autocomplete can increase the index size significantly, but don’t worry - this gives you blazing faster queries.</p>
+
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">City</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+  <span class="n">searchkick</span> <span class="ss">autocomplete</span><span class="p">:</span> <span class="o">[</span><span class="s2">"name"</span><span class="o">]</span>
+<span class="k">end</span>
+</pre></div>
+
+<p>Reindex and search with:</p>
+
+<div class="highlight"><pre><span class="no">City</span><span class="o">.</span><span class="n">search</span> <span class="s2">"where"</span><span class="p">,</span> <span class="ss">autocomplete</span><span class="p">:</span> <span class="kp">true</span>
+</pre></div>
+
+<p>Typically, you want to use a Javascript library like <a href="http://twitter.github.io/typeahead.js/">typeahead.js</a> or <a href="http://jqueryui.com/autocomplete/">jQuery UI</a>.</p>
+
+<h4>
+<a name="heres-how-to-make-it-work-with-rails" class="anchor" href="#heres-how-to-make-it-work-with-rails"><span class="octicon octicon-link"></span></a>Here’s how to make it work with Rails</h4>
+
+<p>First, add a controller action.</p>
+
+<div class="highlight"><pre><span class="c1"># app/controllers/cities_controller.rb</span>
+<span class="k">class</span> <span class="nc">CitiesController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+
+  <span class="k">def</span> <span class="nf">autocomplete</span>
+    <span class="n">render</span> <span class="ss">json</span><span class="p">:</span> <span class="no">City</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:q</span><span class="o">]</span><span class="p">,</span> <span class="ss">autocomplete</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:name</span><span class="p">)</span>
+  <span class="k">end</span>
+
+<span class="k">end</span>
+</pre></div>
+
+<p>Then add the search box and Javascript code to a view.</p>
+
+<div class="highlight"><pre><span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">id=</span><span class="s">"q"</span> <span class="na">name=</span><span class="s">"q"</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.9.3/typeahead.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script&gt;</span>
+  <span class="nx">$</span><span class="p">(</span><span class="s2">"#q"</span><span class="p">).</span><span class="nx">typeahead</span><span class="p">({</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s2">"city"</span><span class="p">,</span>
+    <span class="nx">remote</span><span class="o">:</span> <span class="s2">"/cities/autocomplete?q=%QUERY"</span>
+  <span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
 </pre></div>
 
 <h3>
