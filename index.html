@@ -15,7 +15,7 @@
         max-width: 800px;
       }
 
-      h2, h3 {
+      h2, h3, h4 {
         margin-top: 1em;
       }
 
@@ -218,6 +218,22 @@
 </pre></div>
 
 <h3>
+<a name="to-reindex-or-not-to-reindex" class="anchor" href="#to-reindex-or-not-to-reindex"><span class="octicon octicon-link"></span></a>To Reindex, or Not to Reindex</h3>
+
+<h4>
+<a name="reindex" class="anchor" href="#reindex"><span class="octicon octicon-link"></span></a>Reindex</h4>
+
+<ul>
+<li>when you install or upgrade searchkick</li>
+<li>change the <code>search_data</code> method</li>
+<li>change the <code>searchkick</code> method</li>
+</ul><h4>
+<a name="no-need-to-reindex" class="anchor" href="#no-need-to-reindex"><span class="octicon octicon-link"></span></a>No need to reindex</h4>
+
+<ul>
+<li>App starts</li>
+<li>Records are inserted, updated or deleted (syncs automatically)</li>
+</ul><h3>
 <a name="keep-getting-better" class="anchor" href="#keep-getting-better"><span class="octicon octicon-link"></span></a>Keep Getting Better</h3>
 
 <p>Searchkick uses conversion data to learn what users are looking for.  If a user searches for “ice cream” and adds Ben &amp; Jerry’s Chunky Monkey to the cart (our conversion metric at Instacart), that item gets a little more weight for similar searches.</p>
