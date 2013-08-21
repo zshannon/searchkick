@@ -60,6 +60,7 @@
 <!-- begin readme -->
 
 <p>Searchkick learns what <strong>your users</strong> are looking for.  As more people search, it gets smarter and the results get better.  It’s friendly for developers - and magical for your users.</p>
+
 <p>Searchkick handles:</p>
 
 <ul>
@@ -81,7 +82,10 @@
 <li>easily personalize results for each user</li>
 <li>autocomplete</li>
 <li>“Did you mean” suggestions</li>
+<li>works with ActiveRecord and Mongoid</li>
 </ul>
+
+<p><a href="https://travis-ci.org/ankane/searchkick"><img src="https://travis-ci.org/ankane/searchkick.png?branch=master" alt="Build Status" style="max-width:100%;"></a></p>
 
 <h2>
 <a name="get-started" class="anchor" href="#get-started"><span class="octicon octicon-link"></span></a>Get Started</h2>
@@ -309,7 +313,7 @@
 
 <p>Reindex and search with:</p>
 
-<div class="highlight"><pre><span class="no">City</span><span class="o">.</span><span class="n">search</span> <span class="s2">"where"</span><span class="p">,</span> <span class="ss">autocomplete</span><span class="p">:</span> <span class="kp">true</span>
+<div class="highlight"><pre><span class="no">City</span><span class="o">.</span><span class="n">search</span> <span class="s2">"san fr"</span><span class="p">,</span> <span class="ss">autocomplete</span><span class="p">:</span> <span class="kp">true</span>
 </pre></div>
 
 <p>Typically, you want to use a Javascript library like <a href="http://twitter.github.io/typeahead.js/">typeahead.js</a> or <a href="http://jqueryui.com/autocomplete/">jQuery UI</a>.</p>
@@ -323,7 +327,7 @@
 <span class="k">class</span> <span class="nc">CitiesController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
 
   <span class="k">def</span> <span class="nf">autocomplete</span>
-    <span class="n">render</span> <span class="ss">json</span><span class="p">:</span> <span class="no">City</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:q</span><span class="o">]</span><span class="p">,</span> <span class="ss">autocomplete</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:name</span><span class="p">)</span>
+    <span class="n">render</span> <span class="ss">json</span><span class="p">:</span> <span class="no">City</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:q</span><span class="o">]</span><span class="p">,</span> <span class="ss">autocomplete</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span> <span class="ss">limit</span><span class="p">:</span> <span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:name</span><span class="p">)</span>
   <span class="k">end</span>
 
 <span class="k">end</span>
@@ -375,6 +379,32 @@
 <div class="highlight"><pre><span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"2% Milk"</span><span class="p">,</span> <span class="ss">facets</span><span class="p">:</span> <span class="p">{</span><span class="n">store_id</span><span class="p">:</span> <span class="p">{</span><span class="ss">where</span><span class="p">:</span> <span class="p">{</span><span class="n">in_stock</span><span class="p">:</span> <span class="kp">true</span><span class="p">}}}</span>
 </pre></div>
 
+<h3>
+<a name="similar-items" class="anchor" href="#similar-items"><span class="octicon octicon-link"></span></a>Similar Items</h3>
+
+<p>Find similar items.</p>
+
+<div class="highlight"><pre><span class="n">product</span> <span class="o">=</span> <span class="no">Product</span><span class="o">.</span><span class="n">first</span>
+<span class="n">product</span><span class="o">.</span><span class="n">similar</span><span class="p">(</span><span class="ss">fields</span><span class="p">:</span> <span class="o">[</span><span class="s2">"name"</span><span class="o">]</span><span class="p">)</span>
+</pre></div>
+
+<h3>
+<a name="geospatial-searches-master" class="anchor" href="#geospatial-searches-master"><span class="octicon octicon-link"></span></a>Geospatial Searches [master]</h3>
+
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">City</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+  <span class="n">searchkick</span> <span class="ss">locations</span><span class="p">:</span> <span class="o">[</span><span class="s2">"location"</span><span class="o">]</span>
+
+  <span class="k">def</span> <span class="nf">search_data</span>
+    <span class="n">to_hash</span><span class="o">.</span><span class="n">merge</span> <span class="ss">location</span><span class="p">:</span> <span class="o">[</span><span class="n">latitude</span><span class="o">.</span><span class="n">to_f</span><span class="p">,</span> <span class="n">longitude</span><span class="o">.</span><span class="n">to_f</span><span class="o">]</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+
+<p>Reindex and search with:</p>
+
+<div class="highlight"><pre><span class="no">City</span><span class="o">.</span><span class="n">search</span> <span class="s2">"san"</span><span class="p">,</span> <span class="ss">where</span><span class="p">:</span> <span class="p">{</span><span class="ss">location</span><span class="p">:</span> <span class="p">{</span><span class="ss">near</span><span class="p">:</span> <span class="o">[</span><span class="mi">37</span><span class="p">,</span> <span class="o">-</span><span class="mi">114</span><span class="o">]</span><span class="p">,</span> <span class="ss">within</span><span class="p">:</span> <span class="s2">"100mi"</span><span class="p">}}</span> <span class="c1"># or 160km</span>
+</pre></div>
+
 <h2>
 <a name="deployment" class="anchor" href="#deployment"><span class="octicon octicon-link"></span></a>Deployment</h2>
 
@@ -419,10 +449,17 @@ heroku config:add <span class="nv">ELASTICSEARCH_URL</span><span class="o">=</sp
 <h2>
 <a name="reference" class="anchor" href="#reference"><span class="octicon octicon-link"></span></a>Reference</h2>
 
+<p>Searchkick requires Elasticsearch <code>0.90.0</code> or higher.</p>
+
 <p>Reindex one record</p>
 
 <div class="highlight"><pre><span class="n">product</span> <span class="o">=</span> <span class="no">Product</span><span class="o">.</span><span class="n">find</span> <span class="mi">10</span>
 <span class="n">product</span><span class="o">.</span><span class="n">reindex</span>
+</pre></div>
+
+<p>Remove old indices</p>
+
+<div class="highlight"><pre><span class="no">Product</span><span class="o">.</span><span class="n">clean_indices</span>
 </pre></div>
 
 <p>Use a different index name</p>
@@ -440,6 +477,11 @@ heroku config:add <span class="nv">ELASTICSEARCH_URL</span><span class="o">=</sp
 <p>Do not load models</p>
 
 <div class="highlight"><pre><span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"milk"</span><span class="p">,</span> <span class="nb">load</span><span class="p">:</span> <span class="kp">false</span>
+</pre></div>
+
+<p>Reindex all models (Rails only)</p>
+
+<div class="highlight"><pre>rake searchkick:reindex:all
 </pre></div>
 
 <h2>
@@ -496,6 +538,11 @@ heroku config:add <span class="nv">ELASTICSEARCH_URL</span><span class="o">=</sp
 <ul>
 <li>Make Searchkick work with any language</li>
 </ul><h2>
+<a name="history" class="anchor" href="#history"><span class="octicon octicon-link"></span></a>History</h2>
+
+<p>View the <a href="https://github.com/ankane/searchkick/blob/master/CHANGELOG.md">changelog</a></p>
+
+<h2>
 <a name="contributing" class="anchor" href="#contributing"><span class="octicon octicon-link"></span></a>Contributing</h2>
 
 <ol>
