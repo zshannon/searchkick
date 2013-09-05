@@ -325,7 +325,7 @@
 <span class="k">class</span> <span class="nc">CitiesController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
 
   <span class="k">def</span> <span class="nf">autocomplete</span>
-    <span class="n">render</span> <span class="ss">json</span><span class="p">:</span> <span class="no">City</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:q</span><span class="o">]</span><span class="p">,</span> <span class="ss">autocomplete</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span> <span class="ss">limit</span><span class="p">:</span> <span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:name</span><span class="p">)</span>
+    <span class="n">render</span> <span class="ss">json</span><span class="p">:</span> <span class="no">City</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:query</span><span class="o">]</span><span class="p">,</span> <span class="ss">autocomplete</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span> <span class="ss">limit</span><span class="p">:</span> <span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:name</span><span class="p">)</span>
   <span class="k">end</span>
 
 <span class="k">end</span>
@@ -333,14 +333,14 @@
 
 <p>Then add the search box and Javascript code to a view.</p>
 
-<div class="highlight"><pre><span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">id=</span><span class="s">"q"</span> <span class="na">name=</span><span class="s">"q"</span> <span class="nt">/&gt;</span>
+<div class="highlight"><pre><span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">id=</span><span class="s">"query"</span> <span class="na">name=</span><span class="s">"query"</span> <span class="nt">/&gt;</span>
 
-<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
-<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.9.3/typeahead.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"jquery.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"typeahead.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
 <span class="nt">&lt;script&gt;</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s2">"#q"</span><span class="p">).</span><span class="nx">typeahead</span><span class="p">({</span>
+  <span class="nx">$</span><span class="p">(</span><span class="s2">"#query"</span><span class="p">).</span><span class="nx">typeahead</span><span class="p">({</span>
     <span class="nx">name</span><span class="o">:</span> <span class="s2">"city"</span><span class="p">,</span>
-    <span class="nx">remote</span><span class="o">:</span> <span class="s2">"/cities/autocomplete?q=%QUERY"</span>
+    <span class="nx">remote</span><span class="o">:</span> <span class="s2">"/cities/autocomplete?query=%QUERY"</span>
   <span class="p">});</span>
 <span class="nt">&lt;/script&gt;</span>
 </pre></div>
