@@ -202,7 +202,12 @@
 
 <p>By default, Searchkick handles misspelled queries by returning results with an <a href="http://en.wikipedia.org/wiki/Levenshtein_distance">edit distance</a> of one. To turn off this feature, use:</p>
 
-<div class="highlight highlight-ruby"><pre><span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"zuchini"</span><span class="p">,</span> <span class="ss">misspellings</span><span class="p">:</span> <span class="kp">false</span>
+<div class="highlight highlight-ruby"><pre><span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"zuchini"</span><span class="p">,</span> <span class="ss">misspellings</span><span class="p">:</span> <span class="kp">false</span> <span class="c1"># no zucchini</span>
+</pre></div>
+
+<p>You can also change the edit distance with:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"zucini"</span><span class="p">,</span> <span class="ss">misspellings</span><span class="p">:</span> <span class="p">{</span><span class="ss">distance</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span> <span class="c1"># zucchini</span>
 </pre></div>
 
 <h3>
@@ -388,6 +393,28 @@
 </pre></div>
 
 <h3>
+<a name="highlight" class="anchor" href="#highlight"><span class="octicon octicon-link"></span></a>Highlight</h3>
+
+<p>Highlight the search query in the results.</p>
+
+<div class="highlight highlight-ruby"><pre><span class="n">bands</span> <span class="o">=</span> <span class="no">Band</span><span class="o">.</span><span class="n">search</span> <span class="s2">"cinema"</span><span class="p">,</span> <span class="ss">fields</span><span class="p">:</span> <span class="o">[</span><span class="ss">:name</span><span class="o">]</span><span class="p">,</span> <span class="ss">highlight</span><span class="p">:</span> <span class="kp">true</span>
+</pre></div>
+
+<p><strong>Note:</strong> The <code>fields</code> option is required.</p>
+
+<p>View the highlighted fields with:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="n">bands</span><span class="o">.</span><span class="n">with_details</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">band</span><span class="p">,</span> <span class="n">details</span><span class="o">|</span>
+  <span class="nb">puts</span> <span class="n">details</span><span class="o">[</span><span class="ss">:highlight</span><span class="o">][</span><span class="ss">:name</span><span class="o">]</span> <span class="c1"># "Two Door &lt;em&gt;Cinema&lt;/em&gt; Club"</span>
+<span class="k">end</span>
+</pre></div>
+
+<p>To change the tag, use:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="no">Band</span><span class="o">.</span><span class="n">search</span> <span class="s2">"cinema"</span><span class="p">,</span> <span class="ss">fields</span><span class="p">:</span> <span class="o">[</span><span class="ss">:name</span><span class="o">]</span><span class="p">,</span> <span class="ss">highlight</span><span class="p">:</span> <span class="p">{</span><span class="ss">tag</span><span class="p">:</span> <span class="s2">"&lt;strong&gt;"</span><span class="p">}</span>
+</pre></div>
+
+<h3>
 <a name="similar-items" class="anchor" href="#similar-items"><span class="octicon octicon-link"></span></a>Similar Items</h3>
 
 <p>Find similar items.</p>
@@ -561,7 +588,7 @@ heroku config:add <span class="nv">ELASTICSEARCH_URL</span><span class="o">=</sp
 <p>Replace tire mapping w/ searchkick method</p>
 
 <div class="highlight highlight-ruby"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
-    <span class="n">searchkick</span>
+  <span class="n">searchkick</span>
 <span class="k">end</span>
 </pre></div>
 </li>
