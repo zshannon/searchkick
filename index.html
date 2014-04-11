@@ -85,10 +85,14 @@
 <li>works with ActiveRecord and Mongoid</li>
 </ul>
 
-<div class="alert alert-warning"><img class="emoji" title=":zap:" alt=":zap:" src="https://github.global.ssl.fastly.net/images/icons/emoji/zap.png" height="20" width="20" align="absmiddle"> Even better with <a href="http://ankane.github.io/searchjoy/">Searchjoy</a></div>
+<p><a href="https://travis-ci.org/ankane/searchkick"><img src="https://camo.githubusercontent.com/5a8beb53e2885875ea5e65c37328ab03359dff43/68747470733a2f2f7472617669732d63692e6f72672f616e6b616e652f7365617263686b69636b2e706e673f6272616e63683d6d6173746572" alt="Build Status" data-canonical-src="https://travis-ci.org/ankane/searchkick.png?branch=master" style="max-width:100%;"></a></p>
+
+<p>We highly recommend tracking queries and conversions</p>
+
+<p><img class="emoji" title=":zap:" alt=":zap:" src="https://github.global.ssl.fastly.net/images/icons/emoji/zap.png" height="20" width="20" align="absmiddle"><a href="http://ankane.github.io/searchjoy/">Searchjoy</a> makes it easy</p>
 
 <h2>
-<a name="get-started" class="anchor" href="#get-started"><span class="octicon octicon-link"></span></a>Get Started</h2>
+<a name="user-content-get-started" class="anchor" href="#get-started"><span class="octicon octicon-link"></span></a>Get Started</h2>
 
 <p><a href="http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/setup.html">Install Elasticsearch</a>. For Homebrew, use:</p>
 
@@ -102,7 +106,7 @@
 
 <p>Add searchkick to models you want to search.</p>
 
-<div class="highlight highlight-ruby"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+<div class="highlight highlight-ruby"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
   <span class="n">searchkick</span>
 <span class="k">end</span>
 </pre></div>
@@ -121,7 +125,7 @@
 </pre></div>
 
 <h3>
-<a name="queries" class="anchor" href="#queries"><span class="octicon octicon-link"></span></a>Queries</h3>
+<a name="user-content-queries" class="anchor" href="#queries"><span class="octicon octicon-link"></span></a>Queries</h3>
 
 <p>Query like SQL</p>
 
@@ -166,7 +170,7 @@
 </pre></div>
 
 <h3>
-<a name="get-everything" class="anchor" href="#get-everything"><span class="octicon octicon-link"></span></a>Get Everything</h3>
+<a name="user-content-get-everything" class="anchor" href="#get-everything"><span class="octicon octicon-link"></span></a>Get Everything</h3>
 
 <p>Use a <code>*</code> for the query.</p>
 
@@ -174,7 +178,7 @@
 </pre></div>
 
 <h3>
-<a name="pagination" class="anchor" href="#pagination"><span class="octicon octicon-link"></span></a>Pagination</h3>
+<a name="user-content-pagination" class="anchor" href="#pagination"><span class="octicon octicon-link"></span></a>Pagination</h3>
 
 <p>Plays nicely with kaminari and will_paginate.</p>
 
@@ -186,7 +190,7 @@
 </pre></div>
 
 <h3>
-<a name="partial-matches" class="anchor" href="#partial-matches"><span class="octicon octicon-link"></span></a>Partial Matches</h3>
+<a name="user-content-partial-matches" class="anchor" href="#partial-matches"><span class="octicon octicon-link"></span></a>Partial Matches</h3>
 
 <p>By default, results must match all words in the query.</p>
 
@@ -195,7 +199,7 @@
 
 <p>To change this, use:</p>
 
-<div class="highlight highlight-ruby"><pre><span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"fresh honey"</span><span class="p">,</span> <span class="ss">partial</span><span class="p">:</span> <span class="kp">true</span> <span class="c1"># fresh OR honey</span>
+<div class="highlight highlight-ruby"><pre><span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"fresh honey"</span><span class="p">,</span> <span class="ss">operator</span><span class="p">:</span> <span class="s2">"or"</span> <span class="c1"># fresh OR honey</span>
 </pre></div>
 
 <p>By default, results must match the entire word - <code>back</code> will not match <code>backpack</code>. You can change this behavior with:</p>
@@ -222,7 +226,19 @@
 </pre></div>
 
 <h3>
-<a name="synonyms" class="anchor" href="#synonyms"><span class="octicon octicon-link"></span></a>Synonyms</h3>
+<a name="user-content-language" class="anchor" href="#language"><span class="octicon octicon-link"></span></a>Language</h3>
+
+<p>Searchkick defaults to English for stemming.  To change this, use:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">searchkick</span> <span class="ss">language</span><span class="p">:</span> <span class="s2">"German"</span>
+<span class="k">end</span>
+</pre></div>
+
+<p><a href="http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/analysis-snowball-tokenfilter.html">See the list of languages</a></p>
+
+<h3>
+<a name="user-content-synonyms" class="anchor" href="#synonyms"><span class="octicon octicon-link"></span></a>Synonyms</h3>
 
 <div class="highlight highlight-ruby"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
   <span class="n">searchkick</span> <span class="ss">synonyms</span><span class="p">:</span> <span class="o">[[</span><span class="s2">"scallion"</span><span class="p">,</span> <span class="s2">"green onion"</span><span class="o">]</span><span class="p">,</span> <span class="o">[</span><span class="s2">"qtip"</span><span class="p">,</span> <span class="s2">"cotton swab"</span><span class="o">]]</span>
@@ -232,7 +248,7 @@
 <p>Call <code>Product.reindex</code> after changing synonyms.</p>
 
 <h3>
-<a name="misspellings" class="anchor" href="#misspellings"><span class="octicon octicon-link"></span></a>Misspellings</h3>
+<a name="user-content-misspellings" class="anchor" href="#misspellings"><span class="octicon octicon-link"></span></a>Misspellings</h3>
 
 <p>By default, Searchkick handles misspelled queries by returning results with an <a href="http://en.wikipedia.org/wiki/Levenshtein_distance">edit distance</a> of one. To turn off this feature, use:</p>
 
@@ -245,7 +261,7 @@
 </pre></div>
 
 <h3>
-<a name="indexing" class="anchor" href="#indexing"><span class="octicon octicon-link"></span></a>Indexing</h3>
+<a name="user-content-indexing" class="anchor" href="#indexing"><span class="octicon octicon-link"></span></a>Indexing</h3>
 
 <p>Control what data is indexed with the <code>search_data</code> method. Call <code>Product.reindex</code> after changing this method.</p>
 
@@ -264,7 +280,7 @@
 <p>Searchkick uses <code>find_in_batches</code> to import documents.  To eager load associations, use the <code>search_import</code> scope.</p>
 
 <div class="highlight highlight-ruby"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
-  <span class="n">scope</span> <span class="ss">:search_import</span><span class="p">,</span> <span class="n">includes</span><span class="p">(</span><span class="ss">:searches</span><span class="p">)</span>
+  <span class="n">scope</span> <span class="ss">:search_import</span><span class="p">,</span> <span class="o">-&gt;</span> <span class="p">{</span> <span class="n">includes</span><span class="p">(</span><span class="ss">:searches</span><span class="p">)</span> <span class="p">}</span>
 <span class="k">end</span>
 </pre></div>
 
@@ -278,23 +294,23 @@
 </pre></div>
 
 <h3>
-<a name="to-reindex-or-not-to-reindex" class="anchor" href="#to-reindex-or-not-to-reindex"><span class="octicon octicon-link"></span></a>To Reindex, or Not to Reindex</h3>
+<a name="user-content-to-reindex-or-not-to-reindex" class="anchor" href="#to-reindex-or-not-to-reindex"><span class="octicon octicon-link"></span></a>To Reindex, or Not to Reindex</h3>
 
 <h4>
-<a name="reindex" class="anchor" href="#reindex"><span class="octicon octicon-link"></span></a>Reindex</h4>
+<a name="user-content-reindex" class="anchor" href="#reindex"><span class="octicon octicon-link"></span></a>Reindex</h4>
 
 <ul>
 <li>when you install or upgrade searchkick</li>
 <li>change the <code>search_data</code> method</li>
 <li>change the <code>searchkick</code> method</li>
 </ul><h4>
-<a name="no-need-to-reindex" class="anchor" href="#no-need-to-reindex"><span class="octicon octicon-link"></span></a>No need to reindex</h4>
+<a name="user-content-no-need-to-reindex" class="anchor" href="#no-need-to-reindex"><span class="octicon octicon-link"></span></a>No need to reindex</h4>
 
 <ul>
 <li>App starts</li>
 <li>Records are inserted, updated or deleted (syncs automatically)</li>
 </ul><h3>
-<a name="keep-getting-better" class="anchor" href="#keep-getting-better"><span class="octicon octicon-link"></span></a>Keep Getting Better</h3>
+<a name="user-content-keep-getting-better" class="anchor" href="#keep-getting-better"><span class="octicon octicon-link"></span></a>Keep Getting Better</h3>
 
 <p>Searchkick uses conversion data to learn what users are looking for.  If a user searches for “ice cream” and adds Ben &amp; Jerry’s Chunky Monkey to the cart (our conversion metric at Instacart), that item gets a little more weight for similar searches.</p>
 
@@ -331,7 +347,7 @@
 </pre></div>
 
 <h3>
-<a name="personalized-results" class="anchor" href="#personalized-results"><span class="octicon octicon-link"></span></a>Personalized Results</h3>
+<a name="user-content-personalized-results" class="anchor" href="#personalized-results"><span class="octicon octicon-link"></span></a>Personalized Results</h3>
 
 <p>Order results differently for each user.  For example, show a user’s previously purchased products before other results.</p>
 
@@ -354,11 +370,11 @@
 </pre></div>
 
 <h3>
-<a name="autocomplete" class="anchor" href="#autocomplete"><span class="octicon octicon-link"></span></a>Autocomplete</h3>
+<a name="user-content-autocomplete" class="anchor" href="#autocomplete"><span class="octicon octicon-link"></span></a>Autocomplete</h3>
 
 <p>Autocomplete predicts what a user will type, making the search experience faster and easier.</p>
 
-<p><a href="https://github-camo.global.ssl.fastly.net/9ecf67854fb719ffd0b2eb5b0ae9504470a7d281/687474703a2f2f616e6b616e652e6769746875622e696f2f7365617263686b69636b2f6175746f636f6d706c6574652e706e67" target="_blank"><img src="https://github-camo.global.ssl.fastly.net/9ecf67854fb719ffd0b2eb5b0ae9504470a7d281/687474703a2f2f616e6b616e652e6769746875622e696f2f7365617263686b69636b2f6175746f636f6d706c6574652e706e67" alt="Autocomplete" style="max-width:100%;"></a></p>
+<p><a href="https://camo.githubusercontent.com/9ecf67854fb719ffd0b2eb5b0ae9504470a7d281/687474703a2f2f616e6b616e652e6769746875622e696f2f7365617263686b69636b2f6175746f636f6d706c6574652e706e67" target="_blank"><img src="https://camo.githubusercontent.com/9ecf67854fb719ffd0b2eb5b0ae9504470a7d281/687474703a2f2f616e6b616e652e6769746875622e696f2f7365617263686b69636b2f6175746f636f6d706c6574652e706e67" alt="Autocomplete" data-canonical-src="http://ankane.github.io/searchkick/autocomplete.png" style="max-width:100%;"></a></p>
 
 <p>First, specify which fields use this feature.  This is necessary since autocomplete can increase the index size significantly, but don’t worry - this gives you blazing faster queries.</p>
 
@@ -375,7 +391,7 @@
 <p>Typically, you want to use a Javascript library like <a href="http://twitter.github.io/typeahead.js/">typeahead.js</a> or <a href="http://jqueryui.com/autocomplete/">jQuery UI</a>.</p>
 
 <h4>
-<a name="heres-how-to-make-it-work-with-rails" class="anchor" href="#heres-how-to-make-it-work-with-rails"><span class="octicon octicon-link"></span></a>Here’s how to make it work with Rails</h4>
+<a name="user-content-heres-how-to-make-it-work-with-rails" class="anchor" href="#heres-how-to-make-it-work-with-rails"><span class="octicon octicon-link"></span></a>Here’s how to make it work with Rails</h4>
 
 <p>First, add a controller action.</p>
 
@@ -404,9 +420,9 @@
 </pre></div>
 
 <h3>
-<a name="suggestions" class="anchor" href="#suggestions"><span class="octicon octicon-link"></span></a>Suggestions</h3>
+<a name="user-content-suggestions" class="anchor" href="#suggestions"><span class="octicon octicon-link"></span></a>Suggestions</h3>
 
-<p><a href="https://github-camo.global.ssl.fastly.net/c9682040aadd5d5c72ed1c2643e829a4e12cf0d0/687474703a2f2f616e6b616e652e6769746875622e696f2f7365617263686b69636b2f726563757273696f6e2e706e67" target="_blank"><img src="https://github-camo.global.ssl.fastly.net/c9682040aadd5d5c72ed1c2643e829a4e12cf0d0/687474703a2f2f616e6b616e652e6769746875622e696f2f7365617263686b69636b2f726563757273696f6e2e706e67" alt="Suggest" style="max-width:100%;"></a></p>
+<p><a href="https://camo.githubusercontent.com/c9682040aadd5d5c72ed1c2643e829a4e12cf0d0/687474703a2f2f616e6b616e652e6769746875622e696f2f7365617263686b69636b2f726563757273696f6e2e706e67" target="_blank"><img src="https://camo.githubusercontent.com/c9682040aadd5d5c72ed1c2643e829a4e12cf0d0/687474703a2f2f616e6b616e652e6769746875622e696f2f7365617263686b69636b2f726563757273696f6e2e706e67" alt="Suggest" data-canonical-src="http://ankane.github.io/searchkick/recursion.png" style="max-width:100%;"></a></p>
 
 <div class="highlight highlight-ruby"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
   <span class="n">searchkick</span> <span class="ss">suggest</span><span class="p">:</span> <span class="o">[</span><span class="s2">"name"</span><span class="o">]</span> <span class="c1"># fields to generate suggestions</span>
@@ -420,11 +436,11 @@
 </pre></div>
 
 <h3>
-<a name="facets" class="anchor" href="#facets"><span class="octicon octicon-link"></span></a>Facets</h3>
+<a name="user-content-facets" class="anchor" href="#facets"><span class="octicon octicon-link"></span></a>Facets</h3>
 
 <p><a href="http://www.elasticsearch.org/guide/reference/api/search/facets/">Facets</a> provide aggregated search data.</p>
 
-<p><a href="https://github-camo.global.ssl.fastly.net/16d4cf1db76cda4dac1cca3242f86fdd907631d5/687474703a2f2f616e6b616e652e6769746875622e696f2f7365617263686b69636b2f6661636574732e706e67" target="_blank"><img src="https://github-camo.global.ssl.fastly.net/16d4cf1db76cda4dac1cca3242f86fdd907631d5/687474703a2f2f616e6b616e652e6769746875622e696f2f7365617263686b69636b2f6661636574732e706e67" alt="Facets" style="max-width:100%;"></a></p>
+<p><a href="https://camo.githubusercontent.com/16d4cf1db76cda4dac1cca3242f86fdd907631d5/687474703a2f2f616e6b616e652e6769746875622e696f2f7365617263686b69636b2f6661636574732e706e67" target="_blank"><img src="https://camo.githubusercontent.com/16d4cf1db76cda4dac1cca3242f86fdd907631d5/687474703a2f2f616e6b616e652e6769746875622e696f2f7365617263686b69636b2f6661636574732e706e67" alt="Facets" data-canonical-src="http://ankane.github.io/searchkick/facets.png" style="max-width:100%;"></a></p>
 
 <div class="highlight highlight-ruby"><pre><span class="n">products</span> <span class="o">=</span> <span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"chuck taylor"</span><span class="p">,</span> <span class="ss">facets</span><span class="p">:</span> <span class="o">[</span><span class="ss">:product_type</span><span class="p">,</span> <span class="ss">:gender</span><span class="p">,</span> <span class="ss">:brand</span><span class="o">]</span>
 <span class="nb">p</span> <span class="n">products</span><span class="o">.</span><span class="n">facets</span>
@@ -442,7 +458,7 @@
 </pre></div>
 
 <h3>
-<a name="highlight" class="anchor" href="#highlight"><span class="octicon octicon-link"></span></a>Highlight</h3>
+<a name="user-content-highlight" class="anchor" href="#highlight"><span class="octicon octicon-link"></span></a>Highlight</h3>
 
 <p>Highlight the search query in the results.</p>
 
@@ -464,7 +480,7 @@
 </pre></div>
 
 <h3>
-<a name="similar-items" class="anchor" href="#similar-items"><span class="octicon octicon-link"></span></a>Similar Items</h3>
+<a name="user-content-similar-items" class="anchor" href="#similar-items"><span class="octicon octicon-link"></span></a>Similar Items</h3>
 
 <p>Find similar items.</p>
 
@@ -473,7 +489,7 @@
 </pre></div>
 
 <h3>
-<a name="geospatial-searches" class="anchor" href="#geospatial-searches"><span class="octicon octicon-link"></span></a>Geospatial Searches</h3>
+<a name="user-content-geospatial-searches" class="anchor" href="#geospatial-searches"><span class="octicon octicon-link"></span></a>Geospatial Searches</h3>
 
 <p><strong>Note:</strong> Before <code>0.3.0</code>, locations were indexed incorrectly. When upgrading, be sure to reindex immediately.</p>
 
@@ -497,7 +513,7 @@
 </pre></div>
 
 <h2>
-<a name="inheritance" class="anchor" href="#inheritance"><span class="octicon octicon-link"></span></a>Inheritance</h2>
+<a name="user-content-inheritance" class="anchor" href="#inheritance"><span class="octicon octicon-link"></span></a>Inheritance</h2>
 
 <p>Searchkick supports single table inheritance.</p>
 
@@ -513,8 +529,9 @@
 
 <p>And to search, use:</p>
 
-<div class="highlight highlight-ruby"><pre><span class="no">Animal</span><span class="o">.</span><span class="n">search</span> <span class="s2">"*"</span> <span class="c1"># all animals</span>
-<span class="no">Dog</span><span class="o">.</span><span class="n">search</span> <span class="s2">"*"</span>    <span class="c1"># just dogs</span>
+<div class="highlight highlight-ruby"><pre><span class="no">Animal</span><span class="o">.</span><span class="n">search</span> <span class="s2">"*"</span>                   <span class="c1"># all animals</span>
+<span class="no">Dog</span><span class="o">.</span><span class="n">search</span> <span class="s2">"*"</span>                      <span class="c1"># just dogs</span>
+<span class="no">Animal</span><span class="o">.</span><span class="n">search</span> <span class="s2">"*"</span><span class="p">,</span> <span class="ss">type</span><span class="p">:</span> <span class="o">[</span><span class="no">Dog</span><span class="p">,</span> <span class="no">Cat</span><span class="o">]</span> <span class="c1"># just cats and dogs</span>
 </pre></div>
 
 <p><strong>Note:</strong> The <code>suggest</code> option retrieves suggestions from the parent at the moment.</p>
@@ -523,12 +540,12 @@
 </pre></div>
 
 <h2>
-<a name="deployment" class="anchor" href="#deployment"><span class="octicon octicon-link"></span></a>Deployment</h2>
+<a name="user-content-deployment" class="anchor" href="#deployment"><span class="octicon octicon-link"></span></a>Deployment</h2>
 
 <p>Searchkick uses <code>ENV["ELASTICSEARCH_URL"]</code> for the Elasticsearch server.  This defaults to <code>http://localhost:9200</code>.</p>
 
 <h3>
-<a name="heroku" class="anchor" href="#heroku"><span class="octicon octicon-link"></span></a>Heroku</h3>
+<a name="user-content-heroku" class="anchor" href="#heroku"><span class="octicon octicon-link"></span></a>Heroku</h3>
 
 <p>Choose an add-on: <a href="https://addons.heroku.com/searchbox">SearchBox</a>, <a href="https://addons.heroku.com/bonsai">Bonsai</a>, or <a href="https://addons.heroku.com/foundelasticsearch">Found</a>.</p>
 
@@ -551,7 +568,7 @@ heroku config:add <span class="nv">ELASTICSEARCH_URL</span><span class="o">=</sp
 </pre></div>
 
 <h3>
-<a name="other" class="anchor" href="#other"><span class="octicon octicon-link"></span></a>Other</h3>
+<a name="user-content-other" class="anchor" href="#other"><span class="octicon octicon-link"></span></a>Other</h3>
 
 <p>Create an initializer <code>config/initializers/elasticsearch.rb</code> with:</p>
 
@@ -564,7 +581,7 @@ heroku config:add <span class="nv">ELASTICSEARCH_URL</span><span class="o">=</sp
 </pre></div>
 
 <h2>
-<a name="advanced" class="anchor" href="#advanced"><span class="octicon octicon-link"></span></a>Advanced</h2>
+<a name="user-content-advanced" class="anchor" href="#advanced"><span class="octicon octicon-link"></span></a>Advanced</h2>
 
 <p>Prefer to use the <a href="http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-queries.html">Elasticsearch DSL</a> but still want awesome features like zero-downtime reindexing?</p>
 
@@ -583,7 +600,12 @@ heroku config:add <span class="nv">ELASTICSEARCH_URL</span><span class="o">=</sp
 
 <p>And use the <code>query</code> option to search:</p>
 
-<div class="highlight highlight-ruby"><pre><span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="ss">query</span><span class="p">:</span> <span class="p">{</span><span class="ss">match</span><span class="p">:</span> <span class="p">{</span><span class="nb">name</span><span class="p">:</span> <span class="s2">"milk"</span><span class="p">}}</span>
+<div class="highlight highlight-ruby"><pre><span class="n">products</span> <span class="o">=</span> <span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="ss">query</span><span class="p">:</span> <span class="p">{</span><span class="ss">match</span><span class="p">:</span> <span class="p">{</span><span class="nb">name</span><span class="p">:</span> <span class="s2">"milk"</span><span class="p">}}</span>
+</pre></div>
+
+<p>View the response with:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="n">products</span><span class="o">.</span><span class="n">response</span>
 </pre></div>
 
 <p>To keep the mappings and settings generated by Searchkick, use:</p>
@@ -593,10 +615,17 @@ heroku config:add <span class="nv">ELASTICSEARCH_URL</span><span class="o">=</sp
 <span class="k">end</span>
 </pre></div>
 
-<h2>
-<a name="reference" class="anchor" href="#reference"><span class="octicon octicon-link"></span></a>Reference</h2>
+<p>To modify the query generated by Searchkick, use:</p>
 
-<p>Searchkick requires Elasticsearch <code>0.90.0</code> or higher.</p>
+<div class="highlight highlight-ruby"><pre><span class="n">query</span> <span class="o">=</span> <span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"2% Milk"</span><span class="p">,</span> <span class="ss">execute</span><span class="p">:</span> <span class="kp">false</span>
+<span class="n">query</span><span class="o">.</span><span class="n">body</span><span class="o">[</span><span class="ss">:query</span><span class="o">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">match_all</span><span class="p">:</span> <span class="p">{}}</span>
+<span class="n">products</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">execute</span>
+</pre></div>
+
+<h2>
+<a name="user-content-reference" class="anchor" href="#reference"><span class="octicon octicon-link"></span></a>Reference</h2>
+
+<p>Searchkick requires Elasticsearch <code>0.90.4</code> or higher.</p>
 
 <p>Reindex one record</p>
 
@@ -632,9 +661,9 @@ heroku config:add <span class="nv">ELASTICSEARCH_URL</span><span class="o">=</sp
 
 <p>or temporarily</p>
 
-<div class="highlight highlight-ruby"><pre><span class="no">Product</span><span class="o">.</span><span class="n">disable_search_callbacks</span> <span class="c1"># use Searchkick.disable_callbacks for all models</span>
+<div class="highlight highlight-ruby"><pre><span class="no">Product</span><span class="o">.</span><span class="n">disable_search_callbacks</span> <span class="c1"># or use Searchkick.disable_callbacks for all models</span>
 <span class="no">ExpensiveProductsTask</span><span class="o">.</span><span class="n">execute</span>
-<span class="no">Product</span><span class="o">.</span><span class="n">enable_search_callbacks</span>
+<span class="no">Product</span><span class="o">.</span><span class="n">enable_search_callbacks</span> <span class="c1"># or use Searchkick.enable_callbacks for all models</span>
 <span class="no">Product</span><span class="o">.</span><span class="n">reindex</span>
 </pre></div>
 
@@ -663,23 +692,17 @@ heroku config:add <span class="nv">ELASTICSEARCH_URL</span><span class="o">=</sp
 <span class="k">end</span>
 </pre></div>
 
-<p>Reindex conditionally</p>
-
-<div class="highlight highlight-ruby"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
-  <span class="n">searchkick</span> <span class="ss">callbacks</span><span class="p">:</span> <span class="kp">false</span>
-
-  <span class="c1"># add the callbacks manually</span>
-  <span class="n">after_save</span> <span class="ss">:reindex</span><span class="p">,</span> <span class="k">if</span><span class="p">:</span> <span class="nb">proc</span><span class="p">{</span><span class="o">|</span><span class="n">model</span><span class="o">|</span> <span class="n">model</span><span class="o">.</span><span class="n">name_changed?</span> <span class="p">}</span> <span class="c1"># use your own condition</span>
-  <span class="n">after_destroy</span> <span class="ss">:reindex</span>
-<span class="k">end</span>
-</pre></div>
-
 <p>Asynchronous reindexing</p>
 
 <div class="highlight highlight-ruby"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
   <span class="n">searchkick</span> <span class="ss">callbacks</span><span class="p">:</span> <span class="kp">false</span>
 
   <span class="c1"># add the callbacks manually</span>
+
+  <span class="c1"># ActiveRecord - one callback</span>
+  <span class="n">after_commit</span> <span class="ss">:reindex_async</span>
+
+  <span class="c1"># Mongoid - two callbacks</span>
   <span class="n">after_save</span> <span class="ss">:reindex_async</span>
   <span class="n">after_destroy</span> <span class="ss">:reindex_async</span>
 
@@ -690,13 +713,26 @@ heroku config:add <span class="nv">ELASTICSEARCH_URL</span><span class="o">=</sp
 <span class="k">end</span>
 </pre></div>
 
+<p>Reindex conditionally</p>
+
+<p><strong>Note:</strong> With ActiveRecord, use this feature with caution - <a href="https://github.com/elasticsearch/elasticsearch-rails/blob/master/elasticsearch-model/README.md#custom-callbacks">transaction rollbacks can cause data inconstencies</a></p>
+
+<div class="highlight highlight-ruby"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">searchkick</span> <span class="ss">callbacks</span><span class="p">:</span> <span class="kp">false</span>
+
+  <span class="c1"># add the callbacks manually</span>
+  <span class="n">after_save</span> <span class="ss">:reindex</span><span class="p">,</span> <span class="k">if</span><span class="p">:</span> <span class="nb">proc</span><span class="p">{</span><span class="o">|</span><span class="n">model</span><span class="o">|</span> <span class="n">model</span><span class="o">.</span><span class="n">name_changed?</span> <span class="p">}</span> <span class="c1"># use your own condition</span>
+  <span class="n">after_destroy</span> <span class="ss">:reindex</span>
+<span class="k">end</span>
+</pre></div>
+
 <p>Reindex all models (Rails only)</p>
 
 <div class="highlight highlight-sh"><pre>rake searchkick:reindex:all
 </pre></div>
 
 <h2>
-<a name="migrating-from-tire" class="anchor" href="#migrating-from-tire"><span class="octicon octicon-link"></span></a>Migrating from Tire</h2>
+<a name="user-content-migrating-from-tire" class="anchor" href="#migrating-from-tire"><span class="octicon octicon-link"></span></a>Migrating from Tire</h2>
 
 <ol>
 <li>
@@ -726,10 +762,15 @@ heroku config:add <span class="nv">ELASTICSEARCH_URL</span><span class="o">=</sp
 </li>
 <li><p>Once it finishes, replace search calls w/ searchkick calls</p></li>
 </ol><h2>
-<a name="elasticsearch-gotchas" class="anchor" href="#elasticsearch-gotchas"><span class="octicon octicon-link"></span></a>Elasticsearch Gotchas</h2>
+<a name="user-content-note-about-060" class="anchor" href="#note-about-060"><span class="octicon octicon-link"></span></a>Note about 0.6.0</h2>
+
+<p>If running Searchkick <code>0.6.0</code> and Elasticsearch <code>0.90</code>, we recommend upgrading to Searchkick <code>0.6.1</code> to fix an issue that causes downtime when reindexing.</p>
+
+<h2>
+<a name="user-content-elasticsearch-gotchas" class="anchor" href="#elasticsearch-gotchas"><span class="octicon octicon-link"></span></a>Elasticsearch Gotchas</h2>
 
 <h3>
-<a name="inconsistent-scores" class="anchor" href="#inconsistent-scores"><span class="octicon octicon-link"></span></a>Inconsistent Scores</h3>
+<a name="user-content-inconsistent-scores" class="anchor" href="#inconsistent-scores"><span class="octicon octicon-link"></span></a>Inconsistent Scores</h3>
 
 <p>Due to the distributed nature of Elasticsearch, you can get incorrect results when the number of documents in the index is low.  You can <a href="http://www.elasticsearch.org/blog/understanding-query-then-fetch-vs-dfs-query-then-fetch/">read more about it here</a>.  To fix this, do:</p>
 
@@ -741,24 +782,27 @@ heroku config:add <span class="nv">ELASTICSEARCH_URL</span><span class="o">=</sp
 <p>For convenience, this is set by default in the test environment.</p>
 
 <h2>
-<a name="thanks" class="anchor" href="#thanks"><span class="octicon octicon-link"></span></a>Thanks</h2>
+<a name="user-content-thanks" class="anchor" href="#thanks"><span class="octicon octicon-link"></span></a>Thanks</h2>
 
-<p>Thanks to Karel Minarik for <a href="https://github.com/karmi/tire">Tire</a>, Jaroslav Kalistsuk for <a href="https://gist.github.com/jarosan/3124884">zero downtime reindexing</a>, and Alex Leschenko for <a href="https://github.com/leschenko/elasticsearch_autocomplete">Elasticsearch autocomplete</a>.</p>
+<p>Thanks to Karel Minarik for <a href="https://github.com/elasticsearch/elasticsearch-ruby">Elasticsearch Ruby</a> and <a href="https://github.com/karmi/tire">Tire</a>, Jaroslav Kalistsuk for <a href="https://gist.github.com/jarosan/3124884">zero downtime reindexing</a>, and Alex Leschenko for <a href="https://github.com/leschenko/elasticsearch_autocomplete">Elasticsearch autocomplete</a>.</p>
 
 <h2>
-<a name="todo" class="anchor" href="#todo"><span class="octicon octicon-link"></span></a>TODO</h2>
+<a name="user-content-roadmap" class="anchor" href="#roadmap"><span class="octicon octicon-link"></span></a>Roadmap</h2>
 
 <ul>
-<li>Generate autocomplete predictions from past search queries</li>
-<li>Automatic failover</li>
-<li>Make Searchkick work with any language</li>
+<li>Search multiple fields for different terms</li>
+<li>Search across models</li>
+<li>Search nested objects</li>
+<li>Add section on testing</li>
+<li>Much finer customization</li>
+<li>More transparency into generated queries (for advanced use)</li>
 </ul><h2>
-<a name="history" class="anchor" href="#history"><span class="octicon octicon-link"></span></a>History</h2>
+<a name="user-content-history" class="anchor" href="#history"><span class="octicon octicon-link"></span></a>History</h2>
 
 <p>View the <a href="https://github.com/ankane/searchkick/blob/master/CHANGELOG.md">changelog</a></p>
 
 <h2>
-<a name="contributing" class="anchor" href="#contributing"><span class="octicon octicon-link"></span></a>Contributing</h2>
+<a name="user-content-contributing" class="anchor" href="#contributing"><span class="octicon octicon-link"></span></a>Contributing</h2>
 
 <p>Everyone is encouraged to help improve this project. Here are a few ways you can help:</p>
 
@@ -768,7 +812,13 @@ heroku config:add <span class="nv">ELASTICSEARCH_URL</span><span class="o">=</sp
 </li>
 <li>Write, clarify, or fix documentation</li>
 <li>Suggest or add new features</li>
-</ul>
+</ul><p>To get started with development and testing:</p>
+
+<ol>
+<li>Clone the repo</li>
+<li><code>bundle</code></li>
+<li><code>rake test</code></li>
+</ol>
 
 <!-- end readme -->
 
