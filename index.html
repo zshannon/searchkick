@@ -448,9 +448,25 @@
 <span class="nb">p</span> <span class="n">products</span><span class="o">.</span><span class="n">facets</span>
 </pre></div>
 
-<p>Advanced</p>
+<p>By default, <code>where</code> conditions are not applied to facets (for backward compatibility).</p>
 
-<div class="highlight highlight-ruby"><pre><span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"2% Milk"</span><span class="p">,</span> <span class="ss">facets</span><span class="p">:</span> <span class="p">{</span><span class="n">store_id</span><span class="p">:</span> <span class="p">{</span><span class="ss">where</span><span class="p">:</span> <span class="p">{</span><span class="n">in_stock</span><span class="p">:</span> <span class="kp">true</span><span class="p">},</span> <span class="ss">limit</span><span class="p">:</span> <span class="mi">10</span><span class="p">}}</span>
+<div class="highlight highlight-ruby"><pre><span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"wingtips"</span><span class="p">,</span> <span class="ss">where</span><span class="p">:</span> <span class="p">{</span><span class="ss">color</span><span class="p">:</span> <span class="s2">"brandy"</span><span class="p">},</span> <span class="ss">facets</span><span class="p">:</span> <span class="o">[</span><span class="ss">:size</span><span class="o">]</span>
+<span class="c1"># facets *not* filtered by color :(</span>
+</pre></div>
+
+<p>Change this with:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"wingtips"</span><span class="p">,</span> <span class="ss">where</span><span class="p">:</span> <span class="p">{</span><span class="ss">color</span><span class="p">:</span> <span class="s2">"brandy"</span><span class="p">},</span> <span class="ss">facets</span><span class="p">:</span> <span class="o">[</span><span class="ss">:size</span><span class="o">]</span><span class="p">,</span> <span class="n">smart_facets</span><span class="p">:</span> <span class="kp">true</span>
+</pre></div>
+
+<p>or set <code>where</code> conditions for each facet separately:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"wingtips"</span><span class="p">,</span> <span class="ss">facets</span><span class="p">:</span> <span class="p">{</span><span class="ss">size</span><span class="p">:</span> <span class="p">{</span><span class="ss">where</span><span class="p">:</span> <span class="p">{</span><span class="ss">color</span><span class="p">:</span> <span class="s2">"brandy"</span><span class="p">}}}</span>
+</pre></div>
+
+<p>Limit</p>
+
+<div class="highlight highlight-ruby"><pre><span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"2% Milk"</span><span class="p">,</span> <span class="ss">facets</span><span class="p">:</span> <span class="p">{</span><span class="n">store_id</span><span class="p">:</span> <span class="p">{</span><span class="ss">limit</span><span class="p">:</span> <span class="mi">10</span><span class="p">}}</span>
 </pre></div>
 
 <p>Ranges</p>
