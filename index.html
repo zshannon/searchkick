@@ -380,7 +380,7 @@
   <span class="k">def</span> <span class="nf">search_data</span>
     <span class="p">{</span>
       <span class="nb">name</span><span class="p">:</span> <span class="nb">name</span><span class="p">,</span>
-      <span class="ss">user_ids</span><span class="p">:</span> <span class="n">orders</span><span class="o">.</span><span class="n">pluck</span><span class="p">(</span><span class="ss">:user_id</span><span class="p">)</span> <span class="c1"># boost this product for these users</span>
+      <span class="ss">orderer_ids</span><span class="p">:</span> <span class="n">orders</span><span class="o">.</span><span class="n">pluck</span><span class="p">(</span><span class="ss">:user_id</span><span class="p">)</span> <span class="c1"># boost this product for these users</span>
     <span class="p">}</span>
   <span class="k">end</span>
 
@@ -389,7 +389,7 @@
 
 <p>Reindex and search with:</p>
 
-<div class="highlight highlight-ruby"><pre><span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"milk"</span><span class="p">,</span> <span class="ss">boost_where</span><span class="p">:</span> <span class="p">{</span><span class="ss">user_id</span><span class="p">:</span> <span class="mi">8</span><span class="p">}</span>
+<div class="highlight highlight-ruby"><pre><span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"milk"</span><span class="p">,</span> <span class="ss">boost_where</span><span class="p">:</span> <span class="p">{</span><span class="ss">orderer_ids</span><span class="p">:</span> <span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">}</span>
 </pre></div>
 
 <h3>
