@@ -126,15 +126,15 @@
 <span class="k">end</span>
 </pre></div>
 
+<p>Searchkick supports the complete <a href="http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-search.html">Elasticsearch Search API</a>. As your search becomes more advanced, we recommend you use the <a href="#advanced">Elasticsearch DSL</a> for maximum flexibility.</p>
+
 <h3>
-<a name="user-content-queries" class="anchor" href="#queries"><span class="octicon octicon-link"></span></a>Queries</h3>
+<a name="user-content-queries" class="anchor" href="#queries" aria-hidden="true"><span class="octicon octicon-link"></span></a>Queries</h3>
 
 <p>Query like SQL</p>
 
-<div class="highlight highlight-ruby"><pre><span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"2% Milk"</span><span class="p">,</span> <span class="ss">where</span><span class="p">:</span> <span class="p">{</span><span class="n">in_stock</span><span class="p">:</span> <span class="kp">true</span><span class="p">},</span> <span class="ss">limit</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="ss">offset</span><span class="p">:</span> <span class="mi">50</span>
+<div class="highlight highlight-ruby"><pre><span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"2% Milk"</span><span class="p">,</span> <span class="ss">where</span><span class="p">:</span> <span class="p">{</span><span class="ss">in_stock</span><span class="p">:</span> <span class="kp">true</span><span class="p">},</span> <span class="ss">limit</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="ss">offset</span><span class="p">:</span> <span class="mi">50</span>
 </pre></div>
-
-<p><strong>Note:</strong> If you prefer the Elasticsearch DSL, see the <a href="#advanced">Advanced section</a></p>
 
 <p>Search specific fields</p>
 
