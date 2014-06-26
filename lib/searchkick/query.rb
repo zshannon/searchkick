@@ -129,8 +129,8 @@ module Searchkick
                           query: term
                         }
                       },
-                      script_score: {
-                        script: "doc['count'].value"
+                      field_value_factor: {
+                        field: "count"
                       }
                     }
                   }
@@ -158,8 +158,10 @@ module Searchkick
               field: field
             }
           },
-          script_score: {
-            script: "#{value[:factor].to_f} * log(doc['#{field}'].value + 2.718281828)"
+          field_value_factor: {
+            field: field,
+            factor: value[:factor].to_f,
+            modifier: "log1p"
           }
         }
       end
