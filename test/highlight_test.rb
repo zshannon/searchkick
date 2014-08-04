@@ -13,7 +13,6 @@ class TestHighlight < Minitest::Unit::TestCase
   end
 
   def test_tag_text_middle
-    skip("Reference Issue #239")
     store_names ["Two Door Cinemaclub"]
     assert_equal "Two Door <strong>Cinema</strong>club", Product.search("cinema", fields: [{name: :text_middle}], highlight: {tag: "<strong>"}).with_details.first[1][:highlight][:'name.text_middle']
   end

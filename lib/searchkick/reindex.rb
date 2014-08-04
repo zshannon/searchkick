@@ -139,8 +139,8 @@ module Searchkick
               },
               searchkick_text_middle_index: {
                 type: "custom",
-                tokenizer: "keyword",
-                filter: ["lowercase", "asciifolding", "searchkick_ngram"]
+                tokenizer: "searchkick_text_middle_ngram",
+                filter: ["lowercase", "asciifolding"]
               },
               searchkick_text_end_index: {
                 type: "custom",
@@ -197,6 +197,11 @@ module Searchkick
             tokenizer: {
               searchkick_autocomplete_ngram: {
                 type: "edgeNGram",
+                min_gram: 1,
+                max_gram: 50
+              },
+              searchkick_text_middle_ngram: {
+                type: "ngram",
                 min_gram: 1,
                 max_gram: 50
               }
@@ -267,7 +272,7 @@ module Searchkick
 
           mapping_options.each do |type, fields|
             if fields.include?(field)
-              field_mapping[:fields][type] = {type: "string", index: "analyzed", analyzer: "searchkick_#{type}_index"}
+              field_mapping[:fields][type] = {type: "string", index: "analyzed", analyzer: "searchkick_#{type}_index", term_vector: "with_positions_offsets"}
             end
           end
 
