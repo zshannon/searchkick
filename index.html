@@ -92,7 +92,7 @@
 <p><img class="emoji" title=":zap:" alt=":zap:" src="https://assets-cdn.github.com/images/icons/emoji/zap.png" height="20" width="20" align="absmiddle"><a href="https://github.com/ankane/searchjoy">Searchjoy</a> makes it easy</p>
 
 <h2>
-<a name="user-content-get-started" class="anchor" href="#get-started"><span class="octicon octicon-link"></span></a>Get Started</h2>
+<a name="user-content-get-started" class="anchor" href="#get-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get Started</h2>
 
 <p><a href="http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/setup.html">Install Elasticsearch</a>. For Homebrew, use:</p>
 
@@ -101,7 +101,7 @@
 
 <p>Add this line to your application’s Gemfile:</p>
 
-<div class="highlight highlight-ruby"><pre><span class="n">gem</span> <span class="s2">"searchkick"</span>
+<div class="highlight highlight-ruby"><pre><span class="n">gem</span> <span class="s1">'searchkick'</span>
 </pre></div>
 
 <p>For Elasticsearch 0.90, use version <code>0.6.3</code> and <a href="https://github.com/ankane/searchkick/blob/v0.6.3/README.md">this readme</a>.</p>
@@ -144,14 +144,14 @@
 <p>Where</p>
 
 <div class="highlight highlight-ruby"><pre><span class="ss">where</span><span class="p">:</span> <span class="p">{</span>
-  <span class="n">expires_at</span><span class="p">:</span> <span class="p">{</span><span class="ss">gt</span><span class="p">:</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="p">},</span> <span class="c1"># lt, gte, lte also available</span>
-  <span class="n">orders_count</span><span class="p">:</span> <span class="mi">1</span><span class="o">.</span><span class="n">.</span><span class="mi">10</span><span class="p">,</span>        <span class="c1"># equivalent to {gte: 1, lte: 10}</span>
-  <span class="n">aisle_id</span><span class="p">:</span> <span class="o">[</span><span class="mi">25</span><span class="p">,</span> <span class="mi">30</span><span class="o">]</span><span class="p">,</span>         <span class="c1"># in</span>
-  <span class="n">store_id</span><span class="p">:</span> <span class="p">{</span><span class="ow">not</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>         <span class="c1"># not</span>
-  <span class="n">aisle_id</span><span class="p">:</span> <span class="p">{</span><span class="ow">not</span><span class="p">:</span> <span class="o">[</span><span class="mi">25</span><span class="p">,</span> <span class="mi">30</span><span class="o">]</span><span class="p">},</span>  <span class="c1"># not in</span>
-  <span class="n">user_ids</span><span class="p">:</span> <span class="p">{</span><span class="ss">all</span><span class="p">:</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="o">]</span><span class="p">},</span>    <span class="c1"># all elements in array</span>
+  <span class="ss">expires_at</span><span class="p">:</span> <span class="p">{</span><span class="ss">gt</span><span class="p">:</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="p">},</span> <span class="c1"># lt, gte, lte also available</span>
+  <span class="ss">orders_count</span><span class="p">:</span> <span class="mi">1</span><span class="o">.</span><span class="n">.</span><span class="mi">10</span><span class="p">,</span>        <span class="c1"># equivalent to {gte: 1, lte: 10}</span>
+  <span class="ss">aisle_id</span><span class="p">:</span> <span class="o">[</span><span class="mi">25</span><span class="p">,</span> <span class="mi">30</span><span class="o">]</span><span class="p">,</span>         <span class="c1"># in</span>
+  <span class="ss">store_id</span><span class="p">:</span> <span class="p">{</span><span class="ow">not</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>         <span class="c1"># not</span>
+  <span class="ss">aisle_id</span><span class="p">:</span> <span class="p">{</span><span class="ow">not</span><span class="p">:</span> <span class="o">[</span><span class="mi">25</span><span class="p">,</span> <span class="mi">30</span><span class="o">]</span><span class="p">},</span>  <span class="c1"># not in</span>
+  <span class="ss">user_ids</span><span class="p">:</span> <span class="p">{</span><span class="ss">all</span><span class="p">:</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="o">]</span><span class="p">},</span>    <span class="c1"># all elements in array</span>
   <span class="ow">or</span><span class="p">:</span> <span class="o">[</span>
-    <span class="o">[</span><span class="p">{</span><span class="n">in_stock</span><span class="p">:</span> <span class="kp">true</span><span class="p">},</span> <span class="p">{</span><span class="ss">backordered</span><span class="p">:</span> <span class="kp">true</span><span class="p">}</span><span class="o">]</span>
+    <span class="o">[</span><span class="p">{</span><span class="ss">in_stock</span><span class="p">:</span> <span class="kp">true</span><span class="p">},</span> <span class="p">{</span><span class="ss">backordered</span><span class="p">:</span> <span class="kp">true</span><span class="p">}</span><span class="o">]</span>
   <span class="o">]</span>
 <span class="p">}</span>
 </pre></div>
@@ -179,14 +179,16 @@
 <p>Boost by the value of a field</p>
 
 <div class="highlight highlight-ruby"><pre><span class="ss">boost_by</span><span class="p">:</span> <span class="o">[</span><span class="ss">:orders_count</span><span class="o">]</span> <span class="c1"># give popular documents a little boost</span>
-<span class="ss">boost_by</span><span class="p">:</span> <span class="p">{</span><span class="ss">orders_count</span><span class="p">:</span> <span class="p">{</span><span class="ss">factor</span><span class="p">:</span> <span class="mi">10</span><span class="p">}}</span>
+<span class="ss">boost_by</span><span class="p">:</span> <span class="p">{</span><span class="ss">orders_count</span><span class="p">:</span> <span class="p">{</span><span class="ss">factor</span><span class="p">:</span> <span class="mi">10</span><span class="p">}}</span> <span class="c1"># default factor is 1</span>
 </pre></div>
 
 <p>Boost matching documents</p>
 
-<div class="highlight highlight-ruby"><pre><span class="ss">boost_where</span><span class="p">:</span> <span class="p">{</span><span class="ss">user_id</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+<div class="highlight highlight-ruby"><pre><span class="ss">boost_where</span><span class="p">:</span> <span class="p">{</span><span class="ss">user_id</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span> <span class="c1"># default factor is 1000</span>
 <span class="ss">boost_where</span><span class="p">:</span> <span class="p">{</span><span class="ss">user_id</span><span class="p">:</span> <span class="p">{</span><span class="ss">value</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="ss">factor</span><span class="p">:</span> <span class="mi">100</span><span class="p">}}</span>
 </pre></div>
+
+<p><a href="#keep-getting-better">Conversions</a> are also a great way to boost.</p>
 
 <h3>
 <a name="user-content-get-everything" class="anchor" href="#get-everything" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get Everything</h3>
@@ -203,9 +205,16 @@
 
 <div class="highlight highlight-ruby"><pre><span class="c1"># controller</span>
 <span class="vi">@products</span> <span class="o">=</span> <span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"milk"</span><span class="p">,</span> <span class="ss">page</span><span class="p">:</span> <span class="n">params</span><span class="o">[</span><span class="ss">:page</span><span class="o">]</span><span class="p">,</span> <span class="ss">per_page</span><span class="p">:</span> <span class="mi">20</span>
+</pre></div>
 
-<span class="c1"># view</span>
-<span class="o">&lt;%=</span> <span class="n">paginate</span> <span class="vi">@products</span> <span class="o">%&gt;</span>
+<p>View with kaminari</p>
+
+<div class="highlight highlight-erb"><pre><span class="cp">&lt;%=</span> <span class="n">paginate</span> <span class="vi">@products</span> <span class="cp">%&gt;</span><span class="x"></span>
+</pre></div>
+
+<p>View with will_paginate</p>
+
+<div class="highlight highlight-erb"><pre><span class="cp">&lt;%=</span> <span class="n">will_paginate</span> <span class="vi">@products</span> <span class="cp">%&gt;</span><span class="x"></span>
 </pre></div>
 
 <h3>
@@ -250,6 +259,12 @@
 </pre></div>
 
 <h3>
+<a name="user-content-exact-matches" class="anchor" href="#exact-matches" aria-hidden="true"><span class="octicon octicon-link"></span></a>Exact Matches</h3>
+
+<div class="highlight highlight-ruby"><pre><span class="no">User</span><span class="o">.</span><span class="n">search</span> <span class="s2">"hi@searchkick.org"</span><span class="p">,</span> <span class="ss">fields</span><span class="p">:</span> <span class="o">[</span><span class="p">{</span><span class="ss">email</span><span class="p">:</span> <span class="ss">:exact</span><span class="p">},</span> <span class="ss">:name</span><span class="o">]</span>
+</pre></div>
+
+<h3>
 <a name="user-content-language" class="anchor" href="#language" aria-hidden="true"><span class="octicon octicon-link"></span></a>Language</h3>
 
 <p>Searchkick defaults to English for stemming.  To change this, use:</p>
@@ -272,6 +287,26 @@
 <p>Call <code>Product.reindex</code> after changing synonyms.</p>
 
 <h3>
+<a name="user-content-wordnet" class="anchor" href="#wordnet" aria-hidden="true"><span class="octicon octicon-link"></span></a>WordNet</h3>
+
+<p>Prepopulate English synonyms with the <a href="http://en.wikipedia.org/wiki/WordNet">WordNet database</a>.</p>
+
+<p>Download <a href="http://wordnetcode.princeton.edu/3.0/WNprolog-3.0.tar.gz">WordNet 3.0</a> to each Elasticsearch server and move <code>wn_s.pl</code> to the <code>/var/lib</code> directory.</p>
+
+<div class="highlight highlight-sh"><pre><span class="nb">cd</span> /tmp
+curl -o wordnet.tar.gz http://wordnetcode.princeton.edu/3.0/WNprolog-3.0.tar.gz
+tar -zxvf wordnet.tar.gz
+mv prolog/wn_s.pl /var/lib
+</pre></div>
+
+<p>Tell each model to use it:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">searchkick</span> <span class="ss">wordnet</span><span class="p">:</span> <span class="kp">true</span>
+<span class="k">end</span>
+</pre></div>
+
+<h3>
 <a name="user-content-misspellings" class="anchor" href="#misspellings" aria-hidden="true"><span class="octicon octicon-link"></span></a>Misspellings</h3>
 
 <p>By default, Searchkick handles misspelled queries by returning results with an <a href="http://en.wikipedia.org/wiki/Levenshtein_distance">edit distance</a> of one. To turn off this feature, use:</p>
@@ -281,7 +316,7 @@
 
 <p>You can also change the edit distance with:</p>
 
-<div class="highlight highlight-ruby"><pre><span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"zucini"</span><span class="p">,</span> <span class="ss">misspellings</span><span class="p">:</span> <span class="p">{</span><span class="ss">distance</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span> <span class="c1"># zucchini</span>
+<div class="highlight highlight-ruby"><pre><span class="no">Product</span><span class="o">.</span><span class="n">search</span> <span class="s2">"zucini"</span><span class="p">,</span> <span class="ss">misspellings</span><span class="p">:</span> <span class="p">{</span><span class="ss">edit_distance</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span> <span class="c1"># zucchini</span>
 </pre></div>
 
 <h3>
@@ -332,8 +367,40 @@
 
 <ul class="task-list">
 <li>App starts</li>
-<li>Records are inserted, updated or deleted (syncs automatically)</li>
 </ul><h3>
+<a name="user-content-stay-synced" class="anchor" href="#stay-synced" aria-hidden="true"><span class="octicon octicon-link"></span></a>Stay Synced</h3>
+
+<p>There are three strategies for keeping the index synced with your database.</p>
+
+<ol class="task-list">
+<li>
+<p>Immediate (default)</p>
+
+<p>Anytime a record is inserted, updated, or deleted</p>
+</li>
+<li>
+<p>Asynchronous</p>
+
+<p>Use background jobs for better performance</p>
+
+<div class="highlight highlight-ruby"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">searchkick</span> <span class="ss">callbacks</span><span class="p">:</span> <span class="ss">:async</span>
+<span class="k">end</span>
+</pre></div>
+
+<p>And <a href="https://github.com/ankane/activejob_backport">install Active Job</a> for Rails 4.1 and below</p>
+</li>
+<li>
+<p>Manual</p>
+
+<p>Turn off automatic syncing</p>
+
+<div class="highlight highlight-ruby"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">searchkick</span> <span class="ss">callbacks</span><span class="p">:</span> <span class="kp">false</span>
+<span class="k">end</span>
+</pre></div>
+</li>
+</ol><h3>
 <a name="user-content-keep-getting-better" class="anchor" href="#keep-getting-better" aria-hidden="true"><span class="octicon octicon-link"></span></a>Keep Getting Better</h3>
 
 <p>Searchkick uses conversion data to learn what users are looking for.  If a user searches for “ice cream” and adds Ben &amp; Jerry’s Chunky Monkey to the cart (our conversion metric at Instacart), that item gets a little more weight for similar searches.</p>
@@ -506,6 +573,13 @@
 <h3>
 <a name="user-content-highlight" class="anchor" href="#highlight" aria-hidden="true"><span class="octicon octicon-link"></span></a>Highlight</h3>
 
+<p>Specify which fields to index with highlighting.</p>
+
+<div class="highlight highlight-ruby"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">searchkick</span> <span class="ss">highlight</span><span class="p">:</span> <span class="o">[</span><span class="ss">:name</span><span class="o">]</span>
+<span class="k">end</span>
+</pre></div>
+
 <p>Highlight the search query in the results.</p>
 
 <div class="highlight highlight-ruby"><pre><span class="n">bands</span> <span class="o">=</span> <span class="no">Band</span><span class="o">.</span><span class="n">search</span> <span class="s2">"cinema"</span><span class="p">,</span> <span class="ss">fields</span><span class="p">:</span> <span class="o">[</span><span class="ss">:name</span><span class="o">]</span><span class="p">,</span> <span class="ss">highlight</span><span class="p">:</span> <span class="kp">true</span>
@@ -584,6 +658,32 @@
 </pre></div>
 
 <h2>
+<a name="user-content-debugging-queries" class="anchor" href="#debugging-queries" aria-hidden="true"><span class="octicon octicon-link"></span></a>Debugging Queries</h2>
+
+<p>See how Elasticsearch tokenizes your queries with:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="no">Product</span><span class="o">.</span><span class="n">searchkick_index</span><span class="o">.</span><span class="n">tokens</span><span class="p">(</span><span class="s2">"Dish Washer Soap"</span><span class="p">,</span> <span class="ss">analyzer</span><span class="p">:</span> <span class="s2">"default_index"</span><span class="p">)</span>
+<span class="c1"># ["dish", "dishwash", "washer", "washersoap", "soap"]</span>
+
+<span class="no">Product</span><span class="o">.</span><span class="n">searchkick_index</span><span class="o">.</span><span class="n">tokens</span><span class="p">(</span><span class="s2">"dishwasher soap"</span><span class="p">,</span> <span class="ss">analyzer</span><span class="p">:</span> <span class="s2">"searchkick_search"</span><span class="p">)</span>
+<span class="c1"># ["dishwashersoap"] - no match</span>
+
+<span class="no">Product</span><span class="o">.</span><span class="n">searchkick_index</span><span class="o">.</span><span class="n">tokens</span><span class="p">(</span><span class="s2">"dishwasher soap"</span><span class="p">,</span> <span class="ss">analyzer</span><span class="p">:</span> <span class="s2">"searchkick_search2"</span><span class="p">)</span>
+<span class="c1"># ["dishwash", "soap"] - match!!</span>
+</pre></div>
+
+<p>Partial matches</p>
+
+<div class="highlight highlight-ruby"><pre><span class="no">Product</span><span class="o">.</span><span class="n">searchkick_index</span><span class="o">.</span><span class="n">tokens</span><span class="p">(</span><span class="s2">"San Diego"</span><span class="p">,</span> <span class="ss">analyzer</span><span class="p">:</span> <span class="s2">"searchkick_word_start_index"</span><span class="p">)</span>
+<span class="c1"># ["s", "sa", "san", "d", "di", "die", "dieg", "diego"]</span>
+
+<span class="no">Product</span><span class="o">.</span><span class="n">searchkick_index</span><span class="o">.</span><span class="n">tokens</span><span class="p">(</span><span class="s2">"dieg"</span><span class="p">,</span> <span class="ss">analyzer</span><span class="p">:</span> <span class="s2">"searchkick_word_search"</span><span class="p">)</span>
+<span class="c1"># ["dieg"] - match!!</span>
+</pre></div>
+
+<p>See the <a href="/ankane/searchkick/blob/master/lib/searchkick/reindex.rb#L86">complete list of analyzers</a>.</p>
+
+<h2>
 <a name="user-content-deployment" class="anchor" href="#deployment" aria-hidden="true"><span class="octicon octicon-link"></span></a>Deployment</h2>
 
 <p>Searchkick uses <code>ENV["ELASTICSEARCH_URL"]</code> for the Elasticsearch server.  This defaults to <code>http://localhost:9200</code>.</p>
@@ -623,6 +723,18 @@ heroku config:add <span class="nv">ELASTICSEARCH_URL</span><span class="o">=</sp
 
 <div class="highlight highlight-sh"><pre>rake searchkick:reindex <span class="nv">CLASS</span><span class="o">=</span>Product
 </pre></div>
+
+<h3>
+<a name="user-content-performance" class="anchor" href="#performance" aria-hidden="true"><span class="octicon octicon-link"></span></a>Performance</h3>
+
+<p>For the best performance, add <a href="https://github.com/toland/patron">Patron</a> to your Gemfile.</p>
+
+<div class="highlight highlight-ruby"><pre><span class="n">gem</span> <span class="s1">'patron'</span>
+</pre></div>
+
+<p>Searchkick will automatically use it.</p>
+
+<p><strong>Note:</strong> Patron is not available for Windows.</p>
 
 <h3>
 <a name="user-content-automatic-failover" class="anchor" href="#automatic-failover" aria-hidden="true"><span class="octicon octicon-link"></span></a>Automatic Failover</h3>
@@ -704,19 +816,22 @@ heroku config:add <span class="nv">ELASTICSEARCH_URL</span><span class="o">=</sp
 <span class="k">end</span>
 </pre></div>
 
-<p>Turn off callbacks permanently</p>
-
-<div class="highlight highlight-ruby"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
-  <span class="n">searchkick</span> <span class="ss">callbacks</span><span class="p">:</span> <span class="kp">false</span>
-<span class="k">end</span>
-</pre></div>
-
-<p>or temporarily</p>
+<p>Turn off callbacks temporarily</p>
 
 <div class="highlight highlight-ruby"><pre><span class="no">Product</span><span class="o">.</span><span class="n">disable_search_callbacks</span> <span class="c1"># or use Searchkick.disable_callbacks for all models</span>
 <span class="no">ExpensiveProductsTask</span><span class="o">.</span><span class="n">execute</span>
 <span class="no">Product</span><span class="o">.</span><span class="n">enable_search_callbacks</span> <span class="c1"># or use Searchkick.enable_callbacks for all models</span>
 <span class="no">Product</span><span class="o">.</span><span class="n">reindex</span>
+</pre></div>
+
+<p>Change timeout</p>
+
+<div class="highlight highlight-ruby"><pre><span class="no">Searchkick</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="mi">5</span> <span class="c1"># defaults to 10</span>
+</pre></div>
+
+<p>Change the search method name in <code>config/initializers/searchkick.rb</code></p>
+
+<div class="highlight highlight-ruby"><pre><span class="no">Searchkick</span><span class="o">.</span><span class="n">search_method_name</span> <span class="o">=</span> <span class="ss">:lookup</span>
 </pre></div>
 
 <p>Eager load associations</p>
@@ -744,24 +859,19 @@ heroku config:add <span class="nv">ELASTICSEARCH_URL</span><span class="o">=</sp
 <span class="k">end</span>
 </pre></div>
 
-<p>Asynchronous reindexing</p>
+<p>Reindex asynchronously</p>
 
 <div class="highlight highlight-ruby"><pre><span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
   <span class="n">searchkick</span> <span class="ss">callbacks</span><span class="p">:</span> <span class="kp">false</span>
 
-  <span class="c1"># add the callbacks manually</span>
-
-  <span class="c1"># ActiveRecord - one callback</span>
-  <span class="n">after_commit</span> <span class="ss">:reindex_async</span>
-
-  <span class="c1"># Mongoid - two callbacks</span>
-  <span class="n">after_save</span> <span class="ss">:reindex_async</span>
-  <span class="n">after_destroy</span> <span class="ss">:reindex_async</span>
-
   <span class="k">def</span> <span class="nf">reindex_async</span>
-    <span class="c1"># delayed job</span>
-    <span class="n">delay</span><span class="o">.</span><span class="n">reindex</span>
+    <span class="c1"># custom code to reindex</span>
   <span class="k">end</span>
+
+  <span class="n">after_commit</span> <span class="ss">:reindex_async</span>
+  <span class="c1"># or for Mongoid</span>
+  <span class="c1"># after_save :reindex_async</span>
+  <span class="c1"># after_destroy :reindex_async</span>
 <span class="k">end</span>
 </pre></div>
 
@@ -778,7 +888,7 @@ heroku config:add <span class="nv">ELASTICSEARCH_URL</span><span class="o">=</sp
 <span class="k">end</span>
 </pre></div>
 
-<p>Reindex all models (Rails only)</p>
+<p>Reindex all models - Rails only</p>
 
 <div class="highlight highlight-sh"><pre>rake searchkick:reindex:all
 </pre></div>
