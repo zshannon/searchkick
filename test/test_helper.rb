@@ -3,6 +3,7 @@ Bundler.require(:default)
 require "minitest/autorun"
 require "minitest/pride"
 require "logger"
+require "typhoeus/adapters/faraday"
 
 ENV["RACK_ENV"] = "test"
 
