@@ -252,23 +252,17 @@ module Searchkick
         end
 
         # filters
+        query = payload[:query]
         filters = where_filters(options[:where])
         if filters.any?
-          if options[:facets]
-            payload[:filter] = {
-              and: filters
-            }
-          else
-            # more efficient query if no facets
-            payload[:query] = {
-              filtered: {
-                query: payload[:query],
-                filter: {
-                  and: filters
-                }
+          payload[:query] = {
+            filtered: {
+              query: query,
+              filter: {
+                and: filters
               }
             }
-          end
+          }
         end
 
         # facets
@@ -312,12 +306,17 @@ module Searchkick
             # offset is not possible
             # http://elasticsearch-users.115913.n3.nabble.com/Is-pagination-possible-in-termsStatsFacet-td3422943.html
 
-            facet_options.deep_merge!(where: options[:where].reject { |k| k == field }) if options[:smart_facets] == true
+            facet_options = facet_options.deep_merge(where: options[:where].reject { |k| k == field }) if options[:smart_facets] == true
             facet_filters = where_filters(facet_options[:where])
+            payload[:facets][field][:global] = true
+            payload[:facets][field][:facet_filter] = {query: query}
             if facet_filters.any?
-              payload[:facets][field][:facet_filter] = {
-                and: {
-                  filters: facet_filters
+              payload[:facets][field][:facet_filter][:query] = {
+                filtered: {
+                  query: payload[:facets][field][:facet_filter][:query],
+                  filter: {
+                    and: facet_filters
+                  }
                 }
               }
             end
