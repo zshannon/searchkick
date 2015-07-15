@@ -44,7 +44,15 @@ module Searchkick
           end
 
           def reindex(options = {})
-            searchkick_index.reindex_scope(searchkick_klass, options)
+            if respond_to?(:current_scope) && current_scope && current_scope.to_sql != default_scoped.to_sql
+              message = "Dangerous operation: where is ignored"
+              if logger
+                logger.warn message
+              else
+                warn message
+              end
+            end
+            searchkick_index.reindex_scope(searchkick_klass.unscoped, options)
           end
 
           def clean_indices
