@@ -10,7 +10,7 @@ class TestBoost < Minitest::Test
       {name: "Tomato B", conversions: {"tomato" => 2}},
       {name: "Tomato C", conversions: {"tomato" => 3}}
     ]
-    assert_order "tomato", ["Tomato C", "Tomato B", "Tomato A"], conversions: true
+    assert_order "tomato", ["Tomato C", "Tomato B", "Tomato A"], boost_conversions: true
   end
 
   def test_conversions_stemmed
@@ -18,7 +18,7 @@ class TestBoost < Minitest::Test
       {name: "Tomato A", conversions: {"tomato" => 1, "tomatos" => 1, "Tomatoes" => 1}},
       {name: "Tomato B", conversions: {"Tomato" => 2}}
     ]
-    assert_order "tomato", ["Tomato B", "Tomato A"], conversions: true
+    assert_order "tomato", ["Tomato B", "Tomato A"], boost_conversions: true
   end
 
   # global boost
@@ -44,7 +44,7 @@ class TestBoost < Minitest::Test
       {name: "Product Boost", orders_count: 20},
       {name: "Product Conversions", conversions: {"product" => 10}}
     ]
-    assert_order "product", ["Product Conversions", "Product Boost"], boost: "orders_count", conversions: true
+    assert_order "product", ["Product Conversions", "Product Boost"], boost: "orders_count", boost_conversions: true
   end
 
   def test_user_id

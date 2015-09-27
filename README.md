@@ -422,6 +422,12 @@ Reindex and set up a cron job to add new conversions daily.
 rake searchkick:reindex CLASS=Product
 ```
 
+Search with:
+
+```ruby
+Product.search("milk", boost_conversions: true)
+```
+
 ### Personalized Results
 
 Order results differently for each user.  For example, show a user’s previously purchased products before other results.
@@ -1084,6 +1090,13 @@ Product.searchkick_index.refresh # or this
 View the [changelog](https://github.com/ankane/searchkick/blob/master/CHANGELOG.md).
 
 Important notes are listed below.
+
+### 1.0.0
+
+Breaking changes
+
+- Transpositions are enabled by default - disable with `misspellings: {transpositions: false}`
+- Conversions are not used to boost by default - enable with `boost_conversions: true`
 
 ### 0.6.0 and 0.7.0
 

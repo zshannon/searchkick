@@ -129,7 +129,7 @@ module Searchkick
             }
           end
 
-          if conversions_field && options[:conversions]
+          if conversions_field && options[:boost_conversions]
             # wrap payload in a bool query
             script_score =
               if below12?
