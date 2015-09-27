@@ -99,7 +99,7 @@ module Searchkick
                 misspellings = options.key?(:misspellings) ? options[:misspellings] : options[:mispellings] # why not?
                 if misspellings != false
                   edit_distance = (misspellings.is_a?(Hash) && (misspellings[:edit_distance] || misspellings[:distance])) || 1
-                  transpositions = (misspellings.is_a?(Hash) && misspellings[:transpositions] == true) ? {fuzzy_transpositions: true} : {}
+                  transpositions = (misspellings.is_a?(Hash) && misspellings[:transpositions] != false) ? {fuzzy_transpositions: true} : {}
                   prefix_length = (misspellings.is_a?(Hash) && misspellings[:prefix_length]) || 0
                   qs.concat [
                     shared_options.merge(fuzziness: edit_distance, prefix_length: prefix_length, max_expansions: 3, analyzer: "searchkick_search").merge(transpositions),
