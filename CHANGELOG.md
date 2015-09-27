@@ -1,3 +1,7 @@
+## 1.0.0 [unreleased]
+
+- Added `stemmer` option to replace `langauge`
+
 ## 0.9.1
 
 - `and` now matches `&`

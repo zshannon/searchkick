@@ -319,8 +319,8 @@ module Searchkick
               searchkick_stemmer: {
                 # use stemmer if language is lowercase, snowball otherwise
                 # TODO deprecate language option in favor of stemmer
-                type: options[:language] == options[:language].to_s.downcase ? "stemmer" : "snowball",
-                language: options[:language] || "English"
+                type: (options[:stemmer] || options[:language] == options[:language].to_s.downcase) ? "stemmer" : "snowball",
+                language: options[:stemmer] || options[:language] || "English"
               }
             },
             char_filter: {
