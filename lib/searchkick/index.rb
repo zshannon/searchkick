@@ -200,7 +200,7 @@ module Searchkick
     def index_options
       options = @options
 
-      if options[:mappings] && !options[:merge_mappings]
+      if options[:default_mappings] == false
         settings = options[:settings] || {}
         mappings = options[:mappings]
       else
