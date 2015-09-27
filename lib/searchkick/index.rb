@@ -214,7 +214,7 @@ module Searchkick
               searchkick_keyword: {
                 type: "custom",
                 tokenizer: "keyword",
-                filter: ["lowercase"] + (options[:stem_conversions] == false ? [] : ["searchkick_stemmer"])
+                filter: ["lowercase"] + (options[:stem_conversions] ? ["searchkick_stemmer"] : [])
               },
               default_index: {
                 type: "custom",

@@ -16,9 +16,9 @@ class TestBoost < Minitest::Test
   def test_conversions_stemmed
     store [
       {name: "Tomato A", conversions: {"tomato" => 1, "tomatos" => 1, "Tomatoes" => 1}},
-      {name: "Tomato B", conversions: {"tomato" => 2}}
+      {name: "Tomato B", conversions: {"Tomato" => 2}}
     ]
-    assert_order "tomato", ["Tomato A", "Tomato B"]
+    assert_order "tomato", ["Tomato B", "Tomato A"]
   end
 
   # global boost
