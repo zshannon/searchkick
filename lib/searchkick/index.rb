@@ -121,11 +121,7 @@ module Searchkick
       if block
         block.call(query.body)
       end
-      if options[:execute] == false
-        query
-      else
-        query.execute
-      end
+      query
     end
 
     # reindex

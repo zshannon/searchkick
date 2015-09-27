@@ -599,5 +599,9 @@ module Searchkick
     def below_version?(version)
       Gem::Version.new(Searchkick.server_version) < Gem::Version.new(version)
     end
+
+    def method_missing(m, *args, &block)
+      execute.send(m, *args, &block)
+    end
   end
 end
