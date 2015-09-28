@@ -32,6 +32,21 @@ class TestBoost < Minitest::Test
     assert_order "tomato", ["Tomato C", "Tomato B", "Tomato A"], boost: "orders_count"
   end
 
+  def test_boost_mode_default
+    text = [
+      "Lorem ipsum dolor sit amet",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+    ]
+
+    store [
+      {name: text[0]},
+      {name: text[1], orders_count: 1000},
+      {name: text[2], orders_count: 1010}
+    ]
+    assert_order "lorem", text.reverse, boost_by: {orders_count: {log: false}}
+  end
+
   def test_boost_zero
     store [
       {name: "Zero Boost", orders_count: 0}
