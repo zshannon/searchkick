@@ -45,7 +45,7 @@ Add this line to your application’s Gemfile:
 gem 'searchkick'
 ```
 
-For Elasticsearch 0.90, use version `0.6.3` and [this readme](https://github.com/ankane/searchkick/blob/v0.6.3/README.md).
+For Elasticsearch 2.0, use version `0.9.2` or above. For Elasticsearch 0.90, use version `0.6.3` and [this readme](https://github.com/ankane/searchkick/blob/v0.6.3/README.md).
 
 Add searchkick to models you want to search.
 
@@ -115,6 +115,35 @@ Limit / offset
 
 ```ruby
 limit: 20, offset: 40
+```
+
+### Results
+
+Searches return a `Searchkick::Results` object. This responds like an array to most methods.
+
+```ruby
+results = Product.search("milk")
+results.size
+results.any?
+results.each { ... }
+```
+
+Get total results
+
+```ruby
+results.total_count
+```
+
+Get the time the search took (in milliseconds) [master]
+
+```ruby
+results.took
+```
+
+Get the full response from Elasticsearch
+
+```ruby
+results.response
 ```
 
 ### Boosting
@@ -240,6 +269,8 @@ end
 ```ruby
 class Product < ActiveRecord::Base
   searchkick synonyms: [["scallion", "green onion"], ["qtip", "cotton swab"]]
+  # or
+  # searchkick synonyms: Proc.new { CSV.read("/some/path/synonyms.csv") }
 end
 ```
 
@@ -522,11 +553,95 @@ products = Product.search "peantu butta", suggest: true
 products.suggestions # ["peanut butter"]
 ```
 
-### Facets
+### Aggregations
 
-[Facets](http://www.elasticsearch.org/guide/reference/api/search/facets/) provide aggregated search data.
+[Aggregations](http://www.elasticsearch.org/guide/reference/api/search/facets/) provide aggregated search data.
 
-![Facets](http://ankane.github.io/searchkick/facets.png)
+![Aggregations](http://ankane.github.io/searchkick/facets.png)
+
+```ruby
+products = Product.search "chuck taylor", aggs: [:product_type, :gender, :brand]
+products.aggs
+```
+
+By default, `where` conditions apply to aggregations.
+
+```ruby
+Product.search "wingtips", where: {color: "brandy"}, aggs: [:size]
+# aggregations for brandy wingtips are returned
+```
+
+Change this with:
+
+```ruby
+Product.search "wingtips", where: {color: "brandy"}, aggs: [:size], smart_aggs: false
+# aggregations for all wingtips are returned
+```
+
+Set `where` conditions for each aggregation separately with:
+
+```ruby
+Product.search "wingtips", aggs: {size: {where: {color: "brandy"}}}
+```
+
+Limit
+
+```ruby
+Product.search "apples", aggs: {store_id: {limit: 10}}
+```
+
+#### Moving From Facets
+
+1. Replace `facets` with `aggs` in searches. **Note:** Range and stats facets are not supported at this time.
+
+  ```ruby
+  products = Product.search "chuck taylor", facets: [:brand]
+  # to
+  products = Product.search "chuck taylor", aggs: [:brand]
+  ```
+
+2. Replace the `facets` method with `aggs` for results.
+
+  ```ruby
+  products.facets
+  # to
+  products.aggs
+  ```
+
+  The keys in results differ slightly. Instead of:
+
+  ```json
+  {
+    "_type":"terms",
+    "missing":0,
+    "total":45,
+    "other":34,
+    "terms":[
+      {"term":14.0,"count":11}
+    ]
+  }
+  ```
+
+  You get:
+
+  ```json
+  {
+    "doc_count":45,
+    "doc_count_error_upper_bound":0,
+    "sum_other_doc_count":34,
+    "buckets":[
+      {"key":14.0,"doc_count":11}
+    ]
+  }
+  ```
+
+  Update your application to handle this.
+
+3. By default, `where` conditions apply to aggregations. This is equivalent to `smart_facets: true`. If you have `smart_facets: true`, you can remove it. If this is not desired, set `smart_aggs: false`.
+
+### Facets [deprecated]
+
+Facets have been deprecated in favor of aggregations as of Searchkick 0.9.2. See [how to upgrade](#moving-from-facets).
 
 ```ruby
 products = Product.search "chuck taylor", facets: [:product_type, :gender, :brand]
@@ -668,6 +783,8 @@ City.search "san", boost_by_distance: {field: :location, origin: [37, -122], fun
 
 Searchkick supports [Elasticsearch’s routing feature](https://www.elastic.co/blog/customizing-your-document-routing).
 
+**Note:** Routing is not yet supported for Elasticsearch 2.0.
+
 ```ruby
 class Contact < ActiveRecord::Base
   searchkick routing: :user_id
@@ -711,6 +828,12 @@ Dog.search "airbudd", suggest: true # suggestions for all animals
 ```
 
 ## Debugging Queries
+
+See how Elasticsearch scores your queries with:
+
+```ruby
+Product.search("soap", explain: true)
+```
 
 See how Elasticsearch tokenizes your queries with:
 
@@ -763,6 +886,28 @@ Then deploy and reindex:
 
 ```sh
 heroku run rake searchkick:reindex CLASS=Product
+```
+
+### Amazon Elasticsearch Service
+
+You must use an [IP-based access policy](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-gsg-search.html) for Searchkick to work.
+
+Include `elasticsearch 1.0.14` or greater in your Gemfile.
+
+```ruby
+gem "elasticsearch", ">= 1.0.14"
+```
+
+Create an initializer `config/initializers/elasticsearch.rb` with:
+
+```ruby
+ENV["ELASTICSEARCH_URL"] = "http://es-domain-1234.us-east-1.es.amazonaws.com"
+```
+
+Then deploy and reindex:
+
+```sh
+rake searchkick:reindex CLASS=Product
 ```
 
 ### Other

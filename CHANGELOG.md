@@ -1,6 +1,11 @@
 ## 1.0.0 [unreleased]
 
+- Added support for Elasticsearch 2.0
+- Added support for aggregations
+- Added ability to use misspellings for partial matches
 - Added `stemmer` option to replace `langauge`
+- Added `fragment_size` option for highlight
+- Added `took` method to results
 
 ## 0.9.1
 
