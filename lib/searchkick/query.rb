@@ -1,3 +1,5 @@
+require "digest/md5"
+
 module Searchkick
   class Query
     extend Forwardable
@@ -117,7 +119,19 @@ module Searchkick
     private
 
     def execute_search
-      Searchkick.client.search(params)
+      if options[:cache]
+        cache_options = options[:cache].is_a?(Hash) ? options[:cache] : {}
+        key = Digest::MD5.hexdigest([params.to_json, cache_options[:version]].compact.join("/"))
+        start_time = Time.now
+        response =
+          Rails.cache.fetch("searchkick/#{key}", cache_options.except(:version)) do
+            Searchkick.client.search(params)
+          end
+        response["took"] = ((Time.now.to_f - start_time.to_f) * 1000).round
+        response
+      else
+        Searchkick.client.search(params)
+      end
     end
 
     def prepare
