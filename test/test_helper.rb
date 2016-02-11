@@ -180,10 +180,17 @@ else
   end
 
   class Product < ActiveRecord::Base
+    # after_commit :reindex_store
+
+    def reindex_store
+      if store
+        store.reindex
+        puts "reindex store"
+      end
+    end
   end
 
   class Store < ActiveRecord::Base
-    has_many :products
   end
 
   class Animal < ActiveRecord::Base
@@ -197,7 +204,7 @@ else
 end
 
 class Product
-  belongs_to :store
+  belongs_to :store, touch: true
 
   searchkick \
     synonyms: [
@@ -243,6 +250,15 @@ class Product
 end
 
 class Store
+  has_many :products
+
+  def search_data
+    puts "reindex"
+    serializable_hash.except("id").merge(
+      product_names: products.map(&:name)
+    )
+  end
+
   searchkick \
     routing: true,
     merge_mappings: true,

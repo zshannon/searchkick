@@ -39,4 +39,12 @@ class ModelTest < Minitest::Test
     store_names ["Product B"], Store
     assert_equal Product.all + Store.all, Searchkick.search("product", index_name: [Product, Store], order: "name").to_a
   end
+
+  def test_associations
+    store_names ["Store A"], Store
+    assert_search "product", [], {}, Store
+    store [{name: "Product A", store_id: Store.last.id}]
+    Store.searchkick_index.refresh
+    assert_search "product", ["Store A"], {}, Store
+  end
 end
