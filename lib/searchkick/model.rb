@@ -26,6 +26,9 @@ module Searchkick
           def searchkick_index
             index = class_variable_get :@@searchkick_index
             index = index.call if index.respond_to? :call
+            if Searchkick.env == "test" && ENV["TEST_ENV_NUMBER"]
+              index = "#{index}#{ENV["TEST_ENV_NUMBER"]}"
+            end
             Searchkick::Index.new(index, searchkick_options)
           end
 
