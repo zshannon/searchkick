@@ -124,7 +124,7 @@ module Searchkick
     def search_model(searchkick_klass, term = nil, options = {}, &block)
       query = Searchkick::Query.new(searchkick_klass, term, options)
       yield(query.body) if block
-      if options[:execute] == false
+      unless options[:execute]
         query
       else
         query.execute

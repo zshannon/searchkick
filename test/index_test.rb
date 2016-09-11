@@ -74,7 +74,7 @@ class IndexTest < Minitest::Test
   def test_bad_mapping
     Product.searchkick_index.delete
     store_names ["Product A"]
-    assert_raises(Searchkick::InvalidQueryError) { Product.search "test" }
+    assert_raises(Searchkick::InvalidQueryError) { Product.search("test").to_a }
   ensure
     Product.reindex
   end
@@ -88,18 +88,18 @@ class IndexTest < Minitest::Test
   end
 
   def test_missing_index
-    assert_raises(Searchkick::MissingIndexError) { Product.search "test", index_name: "not_found" }
+    assert_raises(Searchkick::MissingIndexError) { Product.search("test", index_name: "not_found").to_a }
   end
 
   def test_unsupported_version
     raises_exception = ->(_) { raise Elasticsearch::Transport::Transport::Error, "[500] No query registered for [multi_match]" }
     Searchkick.client.stub :search, raises_exception do
-      assert_raises(Searchkick::UnsupportedVersionError) { Product.search("test") }
+      assert_raises(Searchkick::UnsupportedVersionError) { Product.search("test").to_a }
     end
   end
 
   def test_invalid_query
-    assert_raises(Searchkick::InvalidQueryError) { Product.search(query: {boom: true}) }
+    assert_raises(Searchkick::InvalidQueryError) { Product.search(query: {boom: true}).to_a }
   end
 
   def test_transaction

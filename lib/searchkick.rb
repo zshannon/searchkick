@@ -138,7 +138,7 @@ module Searchkick
   def self.search(term = nil, options = {}, &block)
     query = Searchkick::Query.new(nil, term, options)
     block.call(query.body) if block
-    if options[:execute] == false
+    unless options[:execute]
       query
     else
       query.execute
