@@ -51,6 +51,11 @@ class AutocompleteTest < Minitest::Test
     assert_search "rld men ego", ["Where in the World is Carmen San Diego"], fields: [{name: :word_end}]
   end
 
+  def test_word_start_string_boost
+    store_names ["Where in the World is Carmen San Diego"]
+    assert_search "car san wor", ["Where in the World is Carmen San Diego"], fields: [{"name^5" => "word_start"}]
+  end
+
   def test_word_start_multiple_words
     store_names ["Dark Grey", "Dark Blue"]
     assert_search "dark grey", ["Dark Grey"], fields: [{name: :word_start}]
