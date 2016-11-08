@@ -45,6 +45,16 @@
       img {
         max-width: 100%;
       }
+
+      li {
+        margin-top: 0.2em;
+        margin-bottom: 0.2em;
+      }
+
+      pre {
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
     </style>
 
     <meta property="og:title" content="Searchkick"/>
@@ -356,15 +366,15 @@ mv prolog/wn_s.pl /var/lib
 
 <p>There are three strategies for keeping the index synced with your database.</p>
 
-<ol>
+<ul>
 <li>Immediate (default)</li>
-</ol>
+</ul>
 
 <p>Anytime a record is inserted, updated, or deleted</p>
 
-<ol>
+<ul>
 <li>Asynchronous</li>
-</ol>
+</ul>
 
 <p>Use background jobs for better performance</p>
 <pre class="highlight ruby"><code>  <span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
@@ -373,9 +383,9 @@ mv prolog/wn_s.pl /var/lib
 </code></pre>
 <p>And <a href="https://github.com/ankane/activejob_backport">install Active Job</a> for Rails 4.1 and below. Jobs are added to a queue named <code>searchkick</code>.</p>
 
-<ol>
+<ul>
 <li>Manual</li>
-</ol>
+</ul>
 
 <p>Turn off automatic syncing</p>
 <pre class="highlight ruby"><code>  <span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
@@ -558,16 +568,16 @@ mv prolog/wn_s.pl /var/lib
 </code></pre>
 <h4>Moving From Facets</h4>
 
-<ol>
+<ul>
 <li>Replace <code>facets</code> with <code>aggs</code> in searches. <strong>Note:</strong> Stats facets are not supported at this time.</li>
-</ol>
+</ul>
 <pre class="highlight ruby"><code>  <span class="n">products</span> <span class="o">=</span> <span class="no">Product</span><span class="p">.</span><span class="nf">search</span> <span class="s2">"chuck taylor"</span><span class="p">,</span> <span class="ss">facets: </span><span class="p">[</span><span class="ss">:brand</span><span class="p">]</span>
   <span class="c1"># to</span>
   <span class="n">products</span> <span class="o">=</span> <span class="no">Product</span><span class="p">.</span><span class="nf">search</span> <span class="s2">"chuck taylor"</span><span class="p">,</span> <span class="ss">aggs: </span><span class="p">[</span><span class="ss">:brand</span><span class="p">]</span>
 </code></pre>
-<ol>
+<ul>
 <li>Replace the <code>facets</code> method with <code>aggs</code> for results.</li>
-</ol>
+</ul>
 <pre class="highlight ruby"><code>  <span class="n">products</span><span class="p">.</span><span class="nf">facets</span>
   <span class="c1"># to</span>
   <span class="n">products</span><span class="p">.</span><span class="nf">aggs</span>
@@ -595,10 +605,10 @@ mv prolog/wn_s.pl /var/lib
 </span></code></pre>
 <p>Update your application to handle this.</p>
 
-<ol>
+<ul>
 <li><p>By default, <code>where</code> conditions apply to aggregations. This is equivalent to <code>smart_facets: true</code>. If you have <code>smart_facets: true</code>, you can remove it. If this is not desired, set <code>smart_aggs: false</code>.</p></li>
 <li><p>If you have any range facets with dates, change the key from <code>ranges</code> to <code>date_ranges</code>.</p></li>
-</ol>
+</ul>
 <pre class="highlight ruby"><code>  <span class="ss">facets: </span><span class="p">{</span><span class="ss">date_field: </span><span class="p">{</span><span class="ss">ranges: </span><span class="n">date_ranges</span><span class="p">}}</span>
   <span class="c1"># to</span>
   <span class="ss">aggs: </span><span class="p">{</span><span class="ss">date_field: </span><span class="p">{</span><span class="ss">date_ranges: </span><span class="n">date_ranges</span><span class="p">}}</span>
@@ -1057,29 +1067,29 @@ heroku config:set <span class="nv">ELASTICSEARCH_URL</span><span class="o">=</sp
 
 <h2>Migrating from Tire</h2>
 
-<ol>
+<ul>
 <li>Change <code>search</code> methods to <code>tire.search</code> and add index name in existing search calls</li>
-</ol>
+</ul>
 <pre class="highlight ruby"><code>  <span class="no">Product</span><span class="p">.</span><span class="nf">search</span> <span class="s2">"fruit"</span>
 </code></pre>
 <p>should be replaced with</p>
 <pre class="highlight ruby"><code>  <span class="no">Product</span><span class="p">.</span><span class="nf">tire</span><span class="p">.</span><span class="nf">search</span> <span class="s2">"fruit"</span><span class="p">,</span> <span class="ss">index: </span><span class="s2">"products"</span>
 </code></pre>
-<ol>
+<ul>
 <li>Replace tire mapping w/ searchkick method</li>
-</ol>
+</ul>
 <pre class="highlight ruby"><code>  <span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
     <span class="n">searchkick</span>
   <span class="k">end</span>
 </code></pre>
-<ol>
+<ul>
 <li>Deploy and reindex</li>
-</ol>
+</ul>
 <pre class="highlight ruby"><code>  <span class="n">rake</span> <span class="n">searchkick</span><span class="ss">:reindex</span> <span class="no">CLASS</span><span class="o">=</span><span class="no">Product</span> <span class="c1"># or Product.reindex in the console</span>
 </code></pre>
-<ol>
+<ul>
 <li>Once it finishes, replace search calls w/ searchkick calls</li>
-</ol>
+</ul>
 
 <h2>Upgrading</h2>
 
