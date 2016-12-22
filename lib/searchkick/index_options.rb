@@ -333,7 +333,7 @@ module Searchkick
 
         mappings = {
           _default_: {
-            _all: {type: default_type, index: "analyzed", analyzer: default_analyzer},
+            _all: options[:searchable] ? {enabled: false} : {type: default_type, index: "analyzed", analyzer: default_analyzer},
             properties: mapping,
             _routing: routing,
             # https://gist.github.com/kimchy/2898285
