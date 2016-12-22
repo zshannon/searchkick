@@ -480,6 +480,10 @@ module Searchkick
     def set_fields
       boost_fields = {}
       fields = options[:fields] || searchkick_options[:searchable]
+      if !fields && Array(options[:index_name]).all? { |m| m.respond_to?(:searchkick_options) }
+        fields = Array(options[:index_name]).flat_map { |m| m.searchkick_options[:searchable] }.uniq
+      end
+
       fields =
         if fields
           if options[:autocomplete]

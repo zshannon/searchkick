@@ -321,6 +321,7 @@ end
 
 class Store
   searchkick \
+    searchable: [:name],
     routing: true,
     merge_mappings: true,
     mappings: {
@@ -342,6 +343,7 @@ end
 
 class Speaker
   searchkick \
+    searchable: [:name],
     conversions: ["conversions_a", "conversions_b"]
 
   attr_accessor :conversions_a, :conversions_b
@@ -356,6 +358,7 @@ end
 
 class Animal
   searchkick \
+    searchable: [:name],
     autocomplete: [:name],
     suggest: [:name],
     index_name: -> { "#{name.tableize}-#{Date.today.year}" }

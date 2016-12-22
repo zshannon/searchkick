@@ -48,7 +48,7 @@ Add searchkick to models you want to search.
 
 ```ruby
 class Product < ActiveRecord::Base
-  searchkick
+  searchkick searchable: [:name]
 end
 ```
 
