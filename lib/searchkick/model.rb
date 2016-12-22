@@ -21,15 +21,16 @@ module Searchkick
 
         class << self
           def searchkick_search(term = nil, options = {}, &block)
-            searchkick_index.search_model(self, term, options, &block)
+            search_index.search_model(self, term, options, &block)
           end
           alias_method Searchkick.search_method_name, :searchkick_search if Searchkick.search_method_name
 
-          def searchkick_index
+          def search_index
             index = class_variable_get :@@searchkick_index
             index = index.call if index.respond_to? :call
             Searchkick::Index.new(index, searchkick_options)
           end
+          alias_method :searchkick_index, :search_index
 
           def enable_search_callbacks
             class_variable_set :@@searchkick_callbacks, true
@@ -50,19 +51,19 @@ module Searchkick
                 raise Searchkick::DangerousOperation, "Only call reindex on models, not relations. Pass `accept_danger: true` if this is your intention."
               end
             end
-            searchkick_index.reindex_scope(searchkick_klass, options)
+            search_index.reindex_scope(searchkick_klass, options)
           end
           alias_method :reindex, :searchkick_reindex unless method_defined?(:reindex)
 
           def searchkick_partial_reindex(method_name)
-            searchkick_index.import_scope(searchkick_klass, method_name: method_name)
-            searchkick_index.refresh
+            search_index.import_scope(searchkick_klass, method_name: method_name)
+            search_index.refresh
             true
           end
           alias_method :partial_reindex, :searchkick_partial_reindex unless method_defined?(:partial_reindex)
 
           def clean_indices
-            searchkick_index.clean_indices
+            search_index.clean_indices
           end
 
           def searchkick_import(options = {})
@@ -70,11 +71,11 @@ module Searchkick
           end
 
           def searchkick_create_index
-            searchkick_index.create_index
+            search_index.create_index
           end
 
           def searchkick_index_options
-            searchkick_index.index_options
+            search_index.index_options
           end
 
           def searchkick_debug
@@ -94,21 +95,21 @@ module Searchkick
         end
 
         def reindex
-          self.class.searchkick_index.reindex_record(self)
+          self.class.search_index.reindex_record(self)
         end unless method_defined?(:reindex)
 
         def reindex_async
-          self.class.searchkick_index.reindex_record_async(self)
+          self.class.search_index.reindex_record_async(self)
         end unless method_defined?(:reindex_async)
 
         def partial_reindex(method_name)
-          self.class.searchkick_index.bulk_update([self], method_name)
-          self.class.searchkick_index.refresh
+          self.class.search_index.bulk_update([self], method_name)
+          self.class.search_index.refresh
           true
         end unless method_defined?(:partial_reindex)
 
         def similar(options = {})
-          self.class.searchkick_index.similar_record(self, options)
+          self.class.search_index.similar_record(self, options)
         end unless method_defined?(:similar)
 
         def search_data

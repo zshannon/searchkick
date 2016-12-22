@@ -5,7 +5,7 @@ class CallbacksTest < Minitest::Test
     Searchkick.callbacks(true) do
       store_names ["Product A", "Product B"]
     end
-    Product.searchkick_index.refresh
+    Product.search_index.refresh
     assert_search "product", ["Product A", "Product B"]
   end
 
@@ -13,7 +13,7 @@ class CallbacksTest < Minitest::Test
     Searchkick.callbacks(false) do
       store_names ["Product A", "Product B"]
     end
-    Product.searchkick_index.refresh
+    Product.search_index.refresh
     assert_search "product", []
   end
 
@@ -21,7 +21,7 @@ class CallbacksTest < Minitest::Test
     Searchkick.callbacks(:bulk) do
       store_names ["Product A", "Product B"]
     end
-    Product.searchkick_index.refresh
+    Product.search_index.refresh
     assert_search "product", ["Product A", "Product B"]
   end
 end

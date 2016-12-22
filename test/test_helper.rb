@@ -362,7 +362,7 @@ class Animal
     # wordnet: true
 end
 
-Product.searchkick_index.delete if Product.searchkick_index.exists?
+Product.search_index.delete if Product.search_index.exists?
 Product.reindex
 Product.reindex # run twice for both index paths
 Product.create!(name: "Set mapping")
@@ -385,7 +385,7 @@ class Minitest::Test
     documents.shuffle.each do |document|
       klass.create!(document)
     end
-    klass.searchkick_index.refresh
+    klass.search_index.refresh
   end
 
   def store_names(names, klass = Product)

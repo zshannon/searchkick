@@ -38,8 +38,8 @@ module Searchkick
       prepare
     end
 
-    def searchkick_index
-      klass ? klass.searchkick_index : nil
+    def search_index
+      klass ? klass.search_index : nil
     end
 
     def searchkick_options
@@ -53,9 +53,9 @@ module Searchkick
     def params
       index =
         if options[:index_name]
-          Array(options[:index_name]).map { |v| v.respond_to?(:searchkick_index) ? v.searchkick_index.name : v }.join(",")
-        elsif searchkick_index
-          searchkick_index.name
+          Array(options[:index_name]).map { |v| v.respond_to?(:search_index) ? v.search_index.name : v }.join(",")
+        elsif search_index
+          search_index.name
         else
           "_all"
         end
@@ -132,21 +132,21 @@ module Searchkick
         pp options
         puts
 
-        if searchkick_index
+        if search_index
           puts "Model Search Data"
           begin
-            pp klass.first(3).map { |r| {index: searchkick_index.record_data(r).merge(data: searchkick_index.send(:search_data, r))}}
+            pp klass.first(3).map { |r| {index: search_index.record_data(r).merge(data: search_index.send(:search_data, r))}}
           rescue => e
             puts "#{e.class.name}: #{e.message}"
           end
           puts
 
           puts "Elasticsearch Mapping"
-          puts JSON.pretty_generate(searchkick_index.mapping)
+          puts JSON.pretty_generate(search_index.mapping)
           puts
 
           puts "Elasticsearch Settings"
-          puts JSON.pretty_generate(searchkick_index.settings)
+          puts JSON.pretty_generate(search_index.settings)
           puts
         end
 
@@ -458,8 +458,8 @@ module Searchkick
           end
         end
 
-        if options[:type] || (klass != searchkick_klass && searchkick_index)
-          @type = [options[:type] || klass].flatten.map { |v| searchkick_index.klass_document_type(v) }
+        if options[:type] || (klass != searchkick_klass && search_index)
+          @type = [options[:type] || klass].flatten.map { |v| search_index.klass_document_type(v) }
         end
 
         # routing
@@ -557,7 +557,7 @@ module Searchkick
       return unless options[:indices_boost]
 
       indices_boost = options[:indices_boost].each_with_object({}) do |(key, boost), memo|
-        index = key.respond_to?(:searchkick_index) ? key.searchkick_index.name : key
+        index = key.respond_to?(:search_index) ? key.search_index.name : key
         # try to use index explicitly instead of alias: https://github.com/elasticsearch/elasticsearch/issues/4756
         index_by_alias = Searchkick.client.indices.get_alias(index: index).keys.first
         memo[index_by_alias || index] = boost

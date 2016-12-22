@@ -14,7 +14,7 @@ class IndexTest < Minitest::Test
 
     Product.clean_indices
 
-    assert Product.searchkick_index.exists?
+    assert Product.search_index.exists?
     assert different_index.exists?
     assert !old_index.exists?
   end
@@ -30,7 +30,7 @@ class IndexTest < Minitest::Test
 
   def test_total_docs
     store_names ["Product A"]
-    assert_equal 1, Product.searchkick_index.total_docs
+    assert_equal 1, Product.search_index.total_docs
   end
 
   def test_mapping
@@ -61,11 +61,11 @@ class IndexTest < Minitest::Test
   end
 
   def test_tokens
-    assert_equal ["dollar", "dollartre", "tree"], Product.searchkick_index.tokens("Dollar Tree")
+    assert_equal ["dollar", "dollartre", "tree"], Product.search_index.tokens("Dollar Tree")
   end
 
   def test_tokens_analyzer
-    assert_equal ["dollar", "tree"], Product.searchkick_index.tokens("Dollar Tree", analyzer: "searchkick_search2")
+    assert_equal ["dollar", "tree"], Product.search_index.tokens("Dollar Tree", analyzer: "searchkick_search2")
   end
 
   def test_record_not_found
@@ -77,7 +77,7 @@ class IndexTest < Minitest::Test
   end
 
   def test_bad_mapping
-    Product.searchkick_index.delete
+    Product.search_index.delete
     store_names ["Product A"]
     assert_raises(Searchkick::InvalidQueryError) { Product.search "test" }
   ensure
@@ -86,7 +86,7 @@ class IndexTest < Minitest::Test
 
   def test_remove_blank_id
     store_names ["Product A"]
-    Product.searchkick_index.remove(OpenStruct.new)
+    Product.search_index.remove(OpenStruct.new)
     assert_search "product", ["Product A"]
   ensure
     Product.reindex

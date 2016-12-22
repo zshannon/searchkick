@@ -8,7 +8,7 @@ module Searchkick
     def perform
       model = @klass.constantize
       record = model.find(@id) rescue nil # TODO fix lazy coding
-      index = model.searchkick_index
+      index = model.search_index
       if !record || !record.should_index?
         # hacky
         record ||= model.new

@@ -4,12 +4,12 @@ class InheritanceTest < Minitest::Test
   def test_child_reindex
     store_names ["Max"], Cat
     assert Dog.reindex
-    Animal.searchkick_index.refresh
+    Animal.search_index.refresh
     assert_equal 1, Animal.search("*").size
   end
 
   def test_child_index_name
-    assert_equal "animals-#{Date.today.year}", Dog.searchkick_index.name
+    assert_equal "animals-#{Date.today.year}", Dog.search_index.name
   end
 
   def test_child_search
@@ -73,6 +73,6 @@ class InheritanceTest < Minitest::Test
   def test_multiple_indices
     store_names ["Product A"]
     store_names ["Product B"], Animal
-    assert_search "product", ["Product A", "Product B"], index_name: [Product.searchkick_index.name, Animal.searchkick_index.name], conversions: false
+    assert_search "product", ["Product A", "Product B"], index_name: [Product.search_index.name, Animal.search_index.name], conversions: false
   end
 end
