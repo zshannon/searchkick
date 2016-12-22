@@ -792,7 +792,7 @@ module Searchkick
           end
         elsif field == :_not
           if below50?
-            filters << {not: {filter: where_filters(value)}}
+            filters << {not: {and: where_filters(value)}}
           else
             filters << {bool: {must_not: where_filters(value)}}
           end
