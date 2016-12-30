@@ -17,16 +17,23 @@ class Product < ActiveRecord::Base
   searchkick batch_size: 100
 end
 
-Product.import ["name", "color", "store_id"], 10000.times.map { |i| ["Product #{i}", ["red", "blue"].sample, rand(10)] }
+Product.import ["name", "color", "store_id"], 100000.times.map { |i| ["Product #{i}", ["red", "blue"].sample, rand(10)] }
 
 puts "Imported"
 
+result = nil
+
 time =
   Benchmark.realtime do
-    Product.reindex(refresh_interval: "30s")
+    # result = RubyProf.profile do
+      Product.reindex(refresh_interval: "30s")
+    # end
   end
 
 puts time.round(1)
 puts Product.searchkick_index.total_docs
+
+# printer = RubyProf::GraphPrinter.new(result)
+# printer.print(STDOUT, min_percent: 2)
 
 # puts Product.count
