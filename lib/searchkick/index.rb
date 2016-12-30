@@ -37,6 +37,10 @@ module Searchkick
       client.indices.get_settings index: name
     end
 
+    def update_settings(settings)
+      client.indices.put_settings index: name, body: settings
+    end
+
     def swap(new_name)
       old_indices =
         begin
@@ -185,7 +189,7 @@ module Searchkick
 
     # https://gist.github.com/jarosan/3124884
     # http://www.elasticsearch.org/blog/changing-mapping-with-zero-downtime/
-    def reindex_scope(scope, import: true, resume: false)
+    def reindex_scope(scope, import: true, resume: false, refresh_interval: nil)
       if resume
         index_name = all_indices.sort.last
         raise Searchkick::Error, "No index to resume" unless index_name
@@ -194,6 +198,10 @@ module Searchkick
         clean_indices
 
         index = create_index(index_options: scope.searchkick_index_options)
+      end
+
+      if refresh_interval
+        index.update_settings(index: {refresh_interval: refresh_interval})
       end
 
       # check if alias exists
@@ -210,6 +218,12 @@ module Searchkick
 
         # import after swap
         index.import_scope(scope, resume: resume) if import
+      end
+
+      if refresh_interval
+        settings = scope.searchkick_index_options[:settings]
+        final_interval = (settings[:index] && settings[:index][:refresh_interval]) || "1s"
+        index.update_settings(index: {refresh_interval: final_interval})
       end
 
       index.refresh
