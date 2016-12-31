@@ -119,7 +119,7 @@ limit: 20, offset: 40
 Select
 
 ```ruby
-select: ["name"]
+select: [:name]
 ```
 
 ### Results
@@ -784,8 +784,8 @@ bands = Band.search "cinema", fields: [:name], highlight: true
 View the highlighted fields with:
 
 ```ruby
-bands.with_details.each do |band, details|
-  puts details[:highlight][:name] # "Two Door <em>Cinema</em> Club"
+bands.each do |band|
+  band.search_highlights[:name] # "Two Door <em>Cinema</em> Club"
 end
 ```
 
@@ -815,14 +815,14 @@ Find similar items.
 
 ```ruby
 product = Product.first
-product.similar(fields: ["name"], where: {size: "12 oz"})
+product.similar(fields: [:name], where: {size: "12 oz"})
 ```
 
 ### Geospatial Searches
 
 ```ruby
 class City < ActiveRecord::Base
-  searchkick locations: ["location"]
+  searchkick locations: [:location]
 
   def search_data
     attributes.merge location: {lat: latitude, lon: longitude}
@@ -1090,7 +1090,7 @@ See [Production Rails](https://github.com/ankane/production_rails) for other goo
 
 ### JSON Generation
 
-To significantly speed up indexing with faster JSON generation, add [Oj](https://github.com/ohler55/oj) to your Gemfile.
+Significantly increase performance with faster JSON generation. Add [Oj](https://github.com/ohler55/oj) to your Gemfile.
 
 ```ruby
 gem 'oj'
@@ -1098,13 +1098,13 @@ gem 'oj'
 
 ### Persistent HTTP Connections
 
-For the best performance, add [Typhoeus](https://github.com/typhoeus/typhoeus) to your Gemfile.
+Significantly increase performance with persistent HTTP connections. Add [Typhoeus](https://github.com/typhoeus/typhoeus) to your Gemfile.
 
 ```ruby
 gem 'typhoeus'
 ```
 
-And create an initializer to reduce log noise with:
+To reduce log noise, create an initializer with:
 
 ```ruby
 Ethon.logger = Logger.new("/dev/null")
