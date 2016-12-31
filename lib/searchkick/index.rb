@@ -220,12 +220,15 @@ module Searchkick
       true
     end
 
-    def import_scope(scope, resume: false, method_name: nil, async: false)
+    def import_scope(scope, resume: false, method_name: nil, async: false, batch: false)
       batch_size = @options[:batch_size] || 1000
 
       # use scope for import
       scope = scope.search_import if scope.respond_to?(:search_import)
-      if scope.respond_to?(:find_in_batches)
+
+      if batch
+        import_or_update scope.to_a, method_name, async
+      elsif scope.respond_to?(:find_in_batches)
         if resume
           # use total docs instead of max id since there's not a great way
           # to get the max _id without scripting since it's a string

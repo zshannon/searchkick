@@ -24,7 +24,7 @@ ActiveRecord::Migration.create_table :products, force: :cascade do |t|
 end
 
 class Product < ActiveRecord::Base
-  searchkick batch_size: 100
+  searchkick batch_size: 1000
 
   def search_data
     {
@@ -35,7 +35,8 @@ class Product < ActiveRecord::Base
   end
 end
 
-Product.import ["name", "color", "store_id"], 20000.times.map { |i| ["Product #{i}", ["red", "blue"].sample, rand(10)] }
+total_docs = 100000
+Product.import ["name", "color", "store_id"], total_docs.times.map { |i| ["Product #{i}", ["red", "blue"].sample, rand(10)] }
 
 puts "Imported"
 
@@ -58,9 +59,15 @@ time =
 
 puts time.round(1)
 
-sleep(5)
-Product.searchkick_index.refresh
-puts Product.searchkick_index.total_docs
+20.times do |i|
+  docs = Product.searchkick_index.total_docs
+  puts "#{i}: #{docs}"
+  if docs == total_docs
+    break
+  end
+  sleep(1)
+  Product.searchkick_index.refresh
+end
 
 if result
   printer = RubyProf::GraphPrinter.new(result)
