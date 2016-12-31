@@ -38,7 +38,7 @@ module Searchkick
       client.indices.get_settings index: name
     end
 
-    def swap(new_name)
+    def promote(new_name)
       old_indices =
         begin
           client.indices.get_alias(name: name).keys
@@ -48,6 +48,7 @@ module Searchkick
       actions = old_indices.map { |old_name| {remove: {index: old_name, alias: name}} } + [{add: {index: new_name, alias: name}}]
       client.indices.update_aliases body: {actions: actions}
     end
+    alias_method :swap, :promote
 
     # record based
 
@@ -199,19 +200,19 @@ module Searchkick
 
       # check if alias exists
       if alias_exists?
-        # import before swap
+        # import before promotion
         index.import_scope(scope, resume: resume, async: async) if import
 
         # get existing indices to remove
         unless async
-          swap(index.name)
+          promote(index.name)
           clean_indices
         end
       else
         delete if exists?
-        swap(index.name)
+        promote(index.name)
 
-        # import after swap
+        # import after promotion
         index.import_scope(scope, resume: resume, async: async) if import
       end
 
