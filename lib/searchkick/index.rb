@@ -203,10 +203,10 @@ module Searchkick
         index.import_scope(scope, resume: resume, async: async) if import
 
         # get existing indices to remove
-        # unless async
+        unless async
           swap(index.name)
           clean_indices
-        # end
+        end
       else
         delete if exists?
         swap(index.name)
@@ -215,9 +215,12 @@ module Searchkick
         index.import_scope(scope, resume: resume, async: async) if import
       end
 
-      index.refresh unless async
-
-      true
+      if async
+        {index_name: index.name}
+      else
+        index.refresh
+        true
+      end
     end
 
     def import_scope(scope, resume: false, method_name: nil, async: false, batch: false)
