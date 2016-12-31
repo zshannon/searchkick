@@ -59,7 +59,7 @@ time =
 
 puts time.round(1)
 
-20.times do |i|
+60.times do |i|
   docs = Product.searchkick_index.total_docs
   puts "#{i}: #{docs}"
   if docs == total_docs

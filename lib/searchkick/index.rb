@@ -237,7 +237,7 @@ module Searchkick
           scope = scope.where("id > ?", total_docs)
         end
 
-        scope = scope.select("id") if async
+        scope = scope.select("id").except(:includes, :preload) if async
 
         scope.find_in_batches batch_size: batch_size do |batch|
           import_or_update batch, method_name, async
@@ -261,7 +261,7 @@ module Searchkick
     def import_or_update(records, method_name, async)
       if records.any?
         if async
-          Searchkick::BulkReindexJob.perform_later(records.first.class.name, records.map(&:id), method_name, name, @options)
+          Searchkick::BulkReindexJob.perform_later(records.first.class.name, records.map(&:id), method_name ? method_name.to_s : nil, name)
         else
           retries = 0
           records = records.select(&:should_index?)
