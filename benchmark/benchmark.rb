@@ -54,7 +54,7 @@ time =
     # result = RubyProf.profile do
     # report = MemoryProfiler.report do
     # stats = AllocationStats.trace do
-    Product.reindex(async: true)
+    Product.reindex #(async: true)
     # end
 
     60.times do |i|
