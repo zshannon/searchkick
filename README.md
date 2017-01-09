@@ -497,7 +497,7 @@ end
 
 ### Analytics
 
-We highly recommend tracking searches and conversions.
+The best starting point to improve your search **by far** is to track searches and conversions.
 
 [Searchjoy](https://github.com/ankane/searchjoy) makes it easy.
 
@@ -853,13 +853,13 @@ City.search "san", where: {location: {geo_polygon: {points: [{lat: 38, lon: -123
 Boost results by distance - closer results are boosted more
 
 ```ruby
-City.search "san", boost_by_distance: {field: :location, origin: {lat: 37, lon: -122}}
+City.search "san", boost_by_distance: {location: {origin: {lat: 37, lon: -122}}}
 ```
 
 Also supports [additional options](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-function-score-query.html#_decay_functions)
 
 ```ruby
-City.search "san", boost_by_distance: {field: :location, origin: {lat: 37, lon: -122}, function: :linear, scale: "30mi", decay: 0.5}
+City.search "san", boost_by_distance: {location: {origin: {lat: 37, lon: -122}, function: "linear", scale: "30mi", decay: 0.5}}
 ```
 
 ### Geo Shapes

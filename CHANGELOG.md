@@ -1,3 +1,10 @@
+## 2.0.2
+
+- Added `retain` option to `reindex`
+- Added support for attributes in highlight tags
+- Fixed potentially silent errors in reindex job
+- Improved syntax for `boost_by_distance`
+
 ## 2.0.1
 
 - Added `search_hit` and `search_highlights` methods to models
