@@ -17,12 +17,6 @@ ActiveRecord::Base.establish_connection adapter: "sqlite3", database: "/tmp/sear
 
 ActiveJob::Base.logger = nil
 
-ActiveRecord::Migration.create_table :products, force: :cascade do |t|
-  t.string :name
-  t.string :color
-  t.integer :store_id
-end
-
 class Product < ActiveRecord::Base
   searchkick batch_size: 1000
 
@@ -36,7 +30,14 @@ class Product < ActiveRecord::Base
 end
 
 total_docs = 100000
-Product.import ["name", "color", "store_id"], total_docs.times.map { |i| ["Product #{i}", ["red", "blue"].sample, rand(10)] }
+
+# ActiveRecord::Migration.create_table :products, force: :cascade do |t|
+#   t.string :name
+#   t.string :color
+#   t.integer :store_id
+# end
+
+# Product.import ["name", "color", "store_id"], total_docs.times.map { |i| ["Product #{i}", ["red", "blue"].sample, rand(10)] }
 
 puts "Imported"
 
@@ -46,6 +47,8 @@ stats = nil
 
 # p GetProcessMem.new.mb
 
+Product.searchkick_index.delete rescue nil
+
 time =
   Benchmark.realtime do
     # result = RubyProf.profile do
@@ -53,21 +56,22 @@ time =
     # stats = AllocationStats.trace do
     Product.reindex(async: true)
     # end
+
+    60.times do |i|
+      docs = Product.searchkick_index.total_docs
+      puts "#{i}: #{docs}"
+      if docs == total_docs
+        break
+      end
+      sleep(1)
+      Product.searchkick_index.refresh
+    end
   end
 
 # p GetProcessMem.new.mb
 
 puts time.round(1)
 
-60.times do |i|
-  docs = Product.searchkick_index.total_docs
-  puts "#{i}: #{docs}"
-  if docs == total_docs
-    break
-  end
-  sleep(1)
-  Product.searchkick_index.refresh
-end
 
 if result
   printer = RubyProf::GraphPrinter.new(result)
