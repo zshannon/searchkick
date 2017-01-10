@@ -276,6 +276,7 @@ module Searchkick
               end
 
             shared_options[:operator] = operator if match_type == :match
+            shared_options[:slop] = 10 if match_type == :match
 
             if field == "_all" || field.end_with?(".analyzed")
               shared_options[:cutoff_frequency] = 0.001 unless operator == "and" || misspellings == false
